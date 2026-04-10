@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../model/learning_item.dart';
 import '../viewmodel/learning_viewmodel.dart';
 import '../../../core/services/audio_service.dart';
 import '../../../core/constants/app_assets.dart';
-import '../../shared/widgets/sound_button.dart';
 
 class DetailScreen extends StatefulWidget {
   final LearningItem item;
@@ -64,10 +64,60 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = context.watch<LearningViewModel>();
+    List<LearningItem> list = _isAlphabet()
+        ? viewModel.alphabets
+        : viewModel.numbers;
+    int index = list.indexWhere((item) => item.label == _currentItem.label);
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.transparent,
-      appBar: AppBar(title: Text('Learn ${_currentItem.label}')),
+      appBar: AppBar(
+        title: Text(
+          "Let's Learn",
+          style: GoogleFonts.fredoka(
+            color: const Color(0xFF5D5D5D),
+            fontWeight: FontWeight.w900,
+            fontSize: 32,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 12),
+          child: Center(
+            child: GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFFB57AFF), Color(0xFF7A4BFF)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
+                  size: 24,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -76,56 +126,253 @@ class _DetailScreenState extends State<DetailScreen> {
           ),
         ),
         child: SafeArea(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: 250,
-                  width: 250,
-                  child: Card(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40),
+          child: Column(
+            children: [
+              const Spacer(flex: 2),
+
+              // 1. Giant 3D Styled Character
+              Center(
+                child: Hero(
+                  tag: 'item_${_currentItem.label}',
+                  child: Chunky3DText(text: _currentItem.label),
+                ),
+              ),
+
+              const Spacer(flex: 3),
+
+              // 2. Navigation Control Center (Bottom)
+              Padding(
+                padding: const EdgeInsets.only(
+                  bottom: 160,
+                  left: 30,
+                  right: 30,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Previous Button (Hidden if first)
+                    SizedBox(
+                      width: 80,
+                      height: 80,
+                      child: index > 0
+                          ? GradientTriangleButton(
+                              direction: AxisDirection.left,
+                              onTap: _goToPrevious,
+                            )
+                          : null,
                     ),
-                    elevation: 8,
-                    child: Center(
-                      child: Text(
-                        _currentItem.label,
-                        style: TextStyle(
-                          fontSize: 120,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).primaryColor,
+
+                    // Sound Button (Professional Circular Gradient)
+                    GestureDetector(
+                      onTap: _playSound,
+                      child: Container(
+                        width: 90,
+                        height: 90,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFFB57AFF), Color(0xFF7A4BFF)],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          border: Border.all(color: Colors.white, width: 4),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFF7A4BFF).withOpacity(0.4),
+                              blurRadius: 15,
+                              offset: const Offset(0, 8),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.volume_up_rounded,
+                          color: Colors.white,
+                          size: 45,
                         ),
                       ),
                     ),
-                  ),
-                ),
-                const SizedBox(height: 60),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    IconButton(
-                      onPressed: _goToPrevious,
-                      icon: const Icon(Icons.arrow_back_ios_rounded, size: 48),
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    SoundButton(onPressed: _playSound),
-                    IconButton(
-                      onPressed: _goToNext,
-                      icon: const Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        size: 48,
-                      ),
-                      color: Theme.of(context).primaryColor,
+
+                    // Next Button (Hidden if last)
+                    SizedBox(
+                      width: 80,
+                      height: 80,
+                      child: index < list.length - 1
+                          ? GradientTriangleButton(
+                              direction: AxisDirection.right,
+                              onTap: _goToNext,
+                            )
+                          : null,
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
+}
+
+// --- Specialized UI Widgets for Detail Screen ---
+
+class Chunky3DText extends StatelessWidget {
+  final String text;
+  const Chunky3DText({super.key, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    const fontSize = 220.0;
+    const shadowColor = Color(0xFF8E24AA); // Purple
+    const fillColor = Color(0xFFFFD54F); // Yellow
+
+    return Stack(
+      children: [
+        // 1. Deep 3D Shadow (Multiple offsets for chunky feel)
+        Text(
+          text,
+          style: GoogleFonts.fredoka(
+            fontSize: fontSize,
+            fontWeight: FontWeight.w900,
+            foreground: Paint()
+              ..style = PaintingStyle.stroke
+              ..strokeWidth = 25
+              ..color = shadowColor
+              ..strokeJoin = StrokeJoin.round,
+          ),
+        ),
+        // 2. Extra Shadow Offset
+        Transform.translate(
+          offset: const Offset(0, 10),
+          child: Text(
+            text,
+            style: GoogleFonts.fredoka(
+              fontSize: fontSize,
+              fontWeight: FontWeight.w900,
+              foreground: Paint()
+                ..style = PaintingStyle.stroke
+                ..strokeWidth = 25
+                ..color = shadowColor
+                ..strokeJoin = StrokeJoin.round,
+            ),
+          ),
+        ),
+        // 3. Main Fill
+        Text(
+          text,
+          style: GoogleFonts.fredoka(
+            fontSize: fontSize,
+            fontWeight: FontWeight.w900,
+            color: fillColor,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class GradientTriangleButton extends StatelessWidget {
+  final AxisDirection direction;
+  final VoidCallback onTap;
+
+  const GradientTriangleButton({
+    super.key,
+    required this.direction,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isLeft = direction == AxisDirection.left;
+
+    return GestureDetector(
+      onTap: onTap,
+      child: CustomPaint(
+        painter: TrianglePainter(isLeft: isLeft),
+        child: Container(
+          width: 80,
+          height: 80,
+          alignment: isLeft
+              ? const Alignment(0.2, 0)
+              : const Alignment(-0.2, 0),
+          child: Icon(
+            isLeft
+                ? Icons.arrow_back_ios_new_rounded
+                : Icons.arrow_forward_ios_rounded,
+            color: Colors.white,
+            size: 30,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class TrianglePainter extends CustomPainter {
+  final bool isLeft;
+  TrianglePainter({required this.isLeft});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..shader = const LinearGradient(
+        colors: [Color(0xFFB57AFF), Color(0xFF7A4BFF)],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ).createShader(Offset.zero & size)
+      ..style = PaintingStyle.fill;
+
+    const cornerRadius = 15.0;
+    final path = Path();
+
+    if (isLeft) {
+      // Rounded Left-pointing triangle
+      path.moveTo(size.width, cornerRadius);
+      path.quadraticBezierTo(size.width, 0, size.width - cornerRadius, 5);
+      path.lineTo(cornerRadius, size.height / 2 - 5);
+      path.quadraticBezierTo(
+        0,
+        size.height / 2,
+        cornerRadius,
+        size.height / 2 + 5,
+      );
+      path.lineTo(size.width - cornerRadius, size.height - 5);
+      path.quadraticBezierTo(
+        size.width,
+        size.height,
+        size.width,
+        size.height - cornerRadius,
+      );
+    } else {
+      // Rounded Right-pointing triangle
+      path.moveTo(0, cornerRadius);
+      path.quadraticBezierTo(0, 0, cornerRadius, 5);
+      path.lineTo(size.width - cornerRadius, size.height / 2 - 5);
+      path.quadraticBezierTo(
+        size.width,
+        size.height / 2,
+        size.width - cornerRadius,
+        size.height / 2 + 5,
+      );
+      path.lineTo(cornerRadius, size.height - 5);
+      path.quadraticBezierTo(0, size.height, 0, size.height - cornerRadius);
+    }
+    path.close();
+
+    // Draw shadow first
+    canvas.drawShadow(path.shift(const Offset(0, 4)), Colors.black26, 6, true);
+    canvas.drawPath(path, paint);
+
+    // Draw white border for professional look
+    final borderPaint = Paint()
+      ..color = Colors.white
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 4
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
+    canvas.drawPath(path, borderPaint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }

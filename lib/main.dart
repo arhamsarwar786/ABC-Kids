@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'app/app.dart';
 import 'core/services/audio_service.dart';
@@ -9,10 +10,13 @@ import 'features/settings/viewmodel/settings_viewmodel.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
+  // Enable Edge-to-Edge mode for true transparency on modern Android
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
   // Initialize Preferences
   await AppPreferences.init();
-  
+
   runApp(
     MultiProvider(
       providers: [

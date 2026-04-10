@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../app/routes/app_routes.dart';
 import '../../../app/theme/app_theme.dart';
 import '../../../core/services/audio_service.dart';
@@ -39,14 +40,56 @@ class _AbcScreenState extends State<AbcScreen> {
       AppTheme.accentPink,
       AppTheme.accentGreen,
       AppTheme.primaryColor,
-      AppTheme.secondaryColor
+      AppTheme.secondaryColor,
     ];
 
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: const Text('ABC Learning'),
+        title: Text(
+          'The Alphabet',
+          style: GoogleFonts.fredoka(
+            color: const Color(0xFF5D5D5D),
+            fontWeight: FontWeight.w900,
+            fontSize: 28,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 12),
+          child: Center(
+            child: GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFFB57AFF), Color(0xFF7A4BFF)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
+                  size: 24,
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
       body: Container(
         decoration: const BoxDecoration(

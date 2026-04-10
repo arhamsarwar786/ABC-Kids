@@ -1,16 +1,31 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:audioplayers/audioplayers.dart';
 import '../utils/app_preferences.dart';
 import '../constants/app_assets.dart';
 
-class AudioService extends ChangeNotifier {
+class AudioService extends ChangeNotifier with WidgetsBindingObserver {
   final AudioPlayer _bgmPlayer = AudioPlayer();
   final AudioPlayer _sfxPlayer = AudioPlayer();
+  bool _isAppInForeground = true;
 
   bool get isMuted => AppPreferences.isSoundMuted;
 
   AudioService() {
     _initPlayers();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+      _isAppInForeground = false;
+      _bgmPlayer.pause();
+    } else if (state == AppLifecycleState.resumed) {
+      _isAppInForeground = true;
+      if (!isMuted) {
+        playBackgroundMusic();
+      }
+    }
   }
 
   Future<void> _initPlayers() async {
@@ -42,7 +57,7 @@ class AudioService extends ChangeNotifier {
   }
 
   Future<void> playBackgroundMusic() async {
-    if (isMuted) return;
+    if (isMuted || !_isAppInForeground) return;
     try {
       final path = _getRelativeAssetPath(AppAssets.backgroundMusic);
       await _bgmPlayer.play(AssetSource(path));
@@ -94,6 +109,7 @@ class AudioService extends ChangeNotifier {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _bgmPlayer.dispose();
     _sfxPlayer.dispose();
     super.dispose();

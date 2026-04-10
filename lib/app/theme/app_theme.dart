@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   static const Color primaryColor = Color(
@@ -19,6 +21,8 @@ class AppTheme {
     return ThemeData(
       primaryColor: primaryColor,
       scaffoldBackgroundColor: backgroundColor,
+      // Apply Fredoka globally as the font family
+      fontFamily: GoogleFonts.fredoka().fontFamily,
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -29,6 +33,13 @@ class AppTheme {
           fontSize: 26,
           fontWeight: FontWeight.w800,
         ),
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark,
+          systemNavigationBarColor: Colors.transparent,
+          systemNavigationBarIconBrightness: Brightness.dark,
+          systemNavigationBarDividerColor: Colors.transparent,
+        ),
       ),
       cardTheme: CardThemeData(
         color: cardColor,
@@ -36,21 +47,23 @@ class AppTheme {
         shadowColor: Colors.black26,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       ),
-      textTheme: const TextTheme(
-        displayLarge: TextStyle(
-          color: textColor,
-          fontSize: 36,
-          fontWeight: FontWeight.bold,
-        ),
-        titleLarge: TextStyle(
-          color: textColor,
-          fontSize: 28,
-          fontWeight: FontWeight.bold,
-        ),
-        bodyLarge: TextStyle(
-          color: textColor,
-          fontSize: 20,
-          fontWeight: FontWeight.w500,
+      textTheme: GoogleFonts.fredokaTextTheme(
+        const TextTheme(
+          displayLarge: TextStyle(
+            color: textColor,
+            fontSize: 36,
+            fontWeight: FontWeight.bold,
+          ),
+          titleLarge: TextStyle(
+            color: textColor,
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+          ),
+          bodyLarge: TextStyle(
+            color: textColor,
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(

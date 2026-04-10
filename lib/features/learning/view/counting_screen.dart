@@ -39,14 +39,56 @@ class _CountingScreenState extends State<CountingScreen> {
       AppTheme.accentGreen,
       AppTheme.primaryColor,
       AppTheme.accentPink,
-      AppTheme.secondaryColor
+      AppTheme.secondaryColor,
     ];
 
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: const Text('Counting 1-10'),
+        title: const Text(
+          'Counting 0-10',
+          style: TextStyle(
+            color: Color(0xFF5D5D5D),
+            fontWeight: FontWeight.w900,
+            fontSize: 28,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 12),
+          child: Center(
+            child: GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFFB57AFF), Color(0xFF7A4BFF)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
+                  size: 24,
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
       body: Container(
         decoration: const BoxDecoration(

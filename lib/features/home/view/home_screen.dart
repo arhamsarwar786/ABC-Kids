@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../app/routes/app_routes.dart';
 import '../../../core/services/audio_service.dart';
 import '../../../core/constants/app_assets.dart';
@@ -40,17 +41,45 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               // Custom Header
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 20,
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const SizedBox(width: 56), // Placeholder to balance center text
-                    const Text(
-                      'Learn',
-                      style: TextStyle(
-                        fontSize: 48,
-                        fontWeight: FontWeight.w900,
-                        color: Color(0xFF5D5D5D),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Home',
+                            style: GoogleFonts.fredoka(
+                              fontSize: 52,
+                              fontWeight: FontWeight.w900,
+                              color: const Color(0xFF5D5D5D),
+                            ),
+                          ),
+                          RichText(
+                            text: TextSpan(
+                              style: GoogleFonts.fredoka(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                                color: const Color(0xFF5D5D5D).withOpacity(0.7),
+                              ),
+                              children: [
+                                const TextSpan(text: 'Welcome back to the '),
+                                TextSpan(
+                                  text: 'ABC Kids',
+                                  style: TextStyle(
+                                    color: const Color(0xFFFF7675),
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     GestureDetector(
@@ -60,17 +89,25 @@ class _HomeScreenState extends State<HomeScreen> {
                         });
                       },
                       child: Container(
-                        width: 56,
-                        height: 56,
+                        width: 64,
+                        height: 64,
                         decoration: BoxDecoration(
                           color: const Color(0xFFFF7675),
                           shape: BoxShape.circle,
                           border: Border.all(color: Colors.white, width: 4),
                           boxShadow: const [
-                            BoxShadow(color: Colors.black26, blurRadius: 4, offset: Offset(0, 2))
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 4,
+                              offset: Offset(0, 2),
+                            ),
                           ],
                         ),
-                        child: const Icon(Icons.settings_rounded, color: Colors.white, size: 32),
+                        child: const Icon(
+                          Icons.settings_rounded,
+                          color: Colors.white,
+                          size: 36,
+                        ),
                       ),
                     ),
                   ],
@@ -157,27 +194,42 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                         centerGraphic: const SizedBox(
                           width: 240,
-                          height: 110,
+                          height: 140,
                           child: Stack(
                             alignment: Alignment.center,
                             children: [
                               Positioned(
                                 left: 20,
-                                child: NumberCircle(numStr: '1', bgColor: Color(0xFFFF5252)),
+                                bottom: 6,
+                                child: NumberCircle(
+                                  numStr: '1',
+                                  bgColor: Color(0xFFFF5252),
+                                ),
                               ),
                               Positioned(
                                 right: 20,
-                                child: NumberCircle(numStr: '3', bgColor: Color(0xFF40C4FF)),
+                                bottom: 6,
+                                child: NumberCircle(
+                                  numStr: '3',
+                                  bgColor: Color(0xFF40C4FF),
+                                ),
                               ),
                               Positioned(
-                                child: NumberCircle(numStr: '2', bgColor: Color(0xFFFFE57F), scale: 1.2),
+                                top: 0,
+                                child: NumberCircle(
+                                  numStr: '2',
+                                  bgColor: Color(0xFFFFE57F),
+                                  scale: 1.1,
+                                ),
                               ),
                             ],
                           ),
                         ),
                       ),
-                      
-                      const SizedBox(height: 48), // Padding at bottom for scroll safety
+
+                      const SizedBox(
+                        height: 48,
+                      ), // Padding at bottom for scroll safety
                     ],
                   ),
                 ),
@@ -219,17 +271,18 @@ class CategoryCard extends StatelessWidget {
           color: backgroundColor,
           borderRadius: BorderRadius.circular(32),
           boxShadow: const [
-            BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, 5))
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 10,
+              offset: Offset(0, 5),
+            ),
           ],
         ),
         child: Stack(
           children: [
             // Center Graphic elements overlapping beautifully
-            Align(
-              alignment: const Alignment(0, -0.3),
-              child: centerGraphic,
-            ),
-            
+            Align(alignment: const Alignment(0, -0.3), child: centerGraphic),
+
             // Bottom Left Title
             Positioned(
               bottom: 24,
@@ -244,7 +297,7 @@ class CategoryCard extends StatelessWidget {
                 ),
               ),
             ),
-            
+
             // Bottom Right Next Arrow Button
             Positioned(
               bottom: 16,
@@ -256,10 +309,18 @@ class CategoryCard extends StatelessWidget {
                   color: buttonColor,
                   shape: BoxShape.circle,
                   boxShadow: const [
-                    BoxShadow(color: Colors.black26, blurRadius: 6, offset: Offset(0, 3))
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 6,
+                      offset: Offset(0, 3),
+                    ),
                   ],
                 ),
-                child: const Icon(Icons.arrow_forward_rounded, color: Colors.white, size: 36),
+                child: const Icon(
+                  Icons.arrow_forward_rounded,
+                  color: Colors.white,
+                  size: 36,
+                ),
               ),
             ),
           ],
@@ -338,7 +399,7 @@ class NumberCircle extends StatelessWidget {
         shape: BoxShape.circle,
         border: Border.all(color: Colors.white, width: 4),
         boxShadow: const [
-          BoxShadow(color: Colors.black26, blurRadius: 6, offset: Offset(0, 3))
+          BoxShadow(color: Colors.black26, blurRadius: 6, offset: Offset(0, 3)),
         ],
       ),
       alignment: Alignment.center,
