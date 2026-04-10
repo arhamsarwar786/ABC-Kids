@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../app/routes/app_routes.dart';
 import '../../../core/utils/app_preferences.dart';
 import '../../../core/constants/app_assets.dart';
+import '../../../app/theme/app_theme.dart';
 import 'onboarding_pages.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -113,17 +114,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             style: const TextStyle(
                               fontSize: 36,
                               fontWeight: FontWeight.w900,
-                              color: Color(0xFF3F51B5), // Indigo
+                              color: AppTheme.secondaryColor,
                             ),
                             textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 16),
                           Text(
                             page.description,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
-                              color: Color(0xFF757575), // Slate Gray
+                              color: AppTheme.textColor.withOpacity(0.7),
                               height: 1.5,
                             ),
                             textAlign: TextAlign.center,
@@ -139,14 +140,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
           // 3. Skip Button (Top Right)
           Positioned(
-            top: 60,
-            right: 20,
+            top: 44,
+            left: 16,
             child: TextButton(
               onPressed: _onSkip,
               child: const Text(
                 'Skip',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: AppTheme.textColor,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -176,8 +177,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         height: 10,
                         decoration: BoxDecoration(
                           color: _currentPage == index
-                              ? const Color(0xFF3F51B5)
-                              : const Color(0xFF3F51B5).withOpacity(0.2),
+                              ? AppTheme.primaryColor
+                              : AppTheme.primaryColor.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(5),
                         ),
                       ),
@@ -193,14 +194,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       height: 65,
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
-                          colors: [Color(0xFFB57AFF), Color(0xFF7A4BFF)],
+                          colors: [
+                            AppTheme.secondaryColor,
+                            AppTheme.accentPink,
+                          ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFF7A4BFF).withOpacity(0.3),
+                            color: AppTheme.secondaryColor.withOpacity(0.3),
                             blurRadius: 10,
                             offset: const Offset(0, 5),
                           ),
