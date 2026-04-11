@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../app/routes/app_routes.dart';
 import '../../../app/theme/app_theme.dart';
 import '../../../core/services/audio_service.dart';
@@ -22,13 +23,13 @@ class _CountingScreenState extends State<CountingScreen> {
     super.initState();
     _audioService = context.read<AudioService>();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _audioService.stopBackgroundMusic();
+      _audioService.setBgmSuspended(true);
     });
   }
 
   @override
   void dispose() {
-    _audioService.playBackgroundMusic();
+    _audioService.setBgmSuspended(false);
     super.dispose();
   }
 
@@ -46,10 +47,10 @@ class _CountingScreenState extends State<CountingScreen> {
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: const Text(
-          'Counting 0-10',
-          style: TextStyle(
-            color: Color(0xFF5D5D5D),
+        title: Text(
+          'The Numbers',
+          style: GoogleFonts.fredoka(
+            color: const Color(0xFF5D5D5D),
             fontWeight: FontWeight.w900,
             fontSize: 28,
           ),

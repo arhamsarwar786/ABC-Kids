@@ -1,8 +1,11 @@
 class AppAssets {
+  static const String splashScreenLogo = "assets/images/splash_screen_logo.png";
   static const String appBackground = "assets/images/app_background_1.png";
-  static const String onboardBackground = "assets/images/onboard_background.png";
+  static const String onboardBackground =
+      "assets/images/onboard_background.png";
 
-  static const String backgroundMusic = "assets/audio/background sound/bakgound_sound.mp3";
+  static const String backgroundMusic =
+      "assets/audio/background sound/bakgound_sound.mp3";
 }
 
 class CountingAudioAssets {

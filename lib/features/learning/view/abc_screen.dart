@@ -23,13 +23,13 @@ class _AbcScreenState extends State<AbcScreen> {
     super.initState();
     _audioService = context.read<AudioService>();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _audioService.stopBackgroundMusic();
+      _audioService.setBgmSuspended(true);
     });
   }
 
   @override
   void dispose() {
-    _audioService.playBackgroundMusic();
+    _audioService.setBgmSuspended(false);
     super.dispose();
   }
 

@@ -122,8 +122,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       // ABC Card
                       CategoryCard(
-                        backgroundColor: const Color(0xFFFF7474),
-                        buttonColor: const Color(0xFF9C27B0), // Purple
+                        backgroundColor: const Color(0xFF7FA3FF), // Light Blue
+                        buttonColor: const Color(0xFF3F51B5), // Purple
                         title: 'Learn Words',
                         onTap: () {
                           viewModel.handleNavigation(() {
@@ -131,47 +131,41 @@ class _HomeScreenState extends State<HomeScreen> {
                           });
                         },
                         centerGraphic: SizedBox(
-                          width: 220,
-                          height: 120,
+                          width: 260,
+                          height: 200,
                           child: Stack(
                             alignment: Alignment.center,
                             children: [
                               Positioned(
-                                left: 10,
-                                top: 0,
+                                left: -6,
+                                top: 22,
                                 child: Transform.rotate(
                                   angle: -0.1,
-                                  child: const OutlinedText(
-                                    text: 'A',
-                                    fontSize: 85,
-                                    textColor: Color(0xFFFFD54F),
-                                    outlineColor: Color(0xFF7B1FA2),
+                                  child: Image.asset(
+                                    'assets/images/abc_letters/a.png',
+                                    height: 130,
                                   ),
                                 ),
                               ),
                               Positioned(
-                                left: 85,
-                                top: -10,
+                                left: 75,
+                                top: -6,
                                 child: Transform.rotate(
                                   angle: 0.1,
-                                  child: const OutlinedText(
-                                    text: 'B',
-                                    fontSize: 75,
-                                    textColor: Color(0xFFFFD54F),
-                                    outlineColor: Color(0xFF7B1FA2),
+                                  child: Image.asset(
+                                    'assets/images/abc_letters/b.png',
+                                    height: 120,
                                   ),
                                 ),
                               ),
                               Positioned(
-                                right: 10,
-                                top: 15,
+                                right: -6,
+                                top: 24,
                                 child: Transform.rotate(
                                   angle: 0.15,
-                                  child: const OutlinedText(
-                                    text: 'C',
-                                    fontSize: 85,
-                                    textColor: Color(0xFFFFD54F),
-                                    outlineColor: Color(0xFF7B1FA2),
+                                  child: Image.asset(
+                                    'assets/images/abc_letters/c.png',
+                                    height: 130,
                                   ),
                                 ),
                               ),
@@ -192,34 +186,33 @@ class _HomeScreenState extends State<HomeScreen> {
                             Navigator.pushNamed(context, AppRoutes.counting);
                           });
                         },
-                        centerGraphic: const SizedBox(
-                          width: 240,
-                          height: 140,
+                        centerGraphic: SizedBox(
+                          width: 260,
+                          height: 200,
                           child: Stack(
                             alignment: Alignment.center,
                             children: [
                               Positioned(
-                                left: 20,
-                                bottom: 6,
-                                child: NumberCircle(
-                                  numStr: '1',
-                                  bgColor: Color(0xFFFF5252),
-                                ),
-                              ),
-                              Positioned(
-                                right: 20,
-                                bottom: 6,
-                                child: NumberCircle(
-                                  numStr: '3',
-                                  bgColor: Color(0xFF40C4FF),
-                                ),
-                              ),
-                              Positioned(
                                 top: 0,
-                                child: NumberCircle(
-                                  numStr: '2',
-                                  bgColor: Color(0xFFFFE57F),
-                                  scale: 1.1,
+                                child: Image.asset(
+                                  'assets/images/123_numbers/2.png',
+                                  height: 120,
+                                ),
+                              ),
+                              Positioned(
+                                left: 5,
+                                bottom: 40,
+                                child: Image.asset(
+                                  'assets/images/123_numbers/1.png',
+                                  height: 130,
+                                ),
+                              ),
+                              Positioned(
+                                right: 5,
+                                bottom: 45,
+                                child: Image.asset(
+                                  'assets/images/123_numbers/3.png',
+                                  height: 130,
                                 ),
                               ),
                             ],

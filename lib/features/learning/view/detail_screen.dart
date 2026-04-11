@@ -16,12 +16,17 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen> {
   late LearningItem _currentItem;
+  late AudioService _audioService;
 
   @override
   void initState() {
     super.initState();
     _currentItem = widget.item;
+    _audioService = context.read<AudioService>();
     _playSound();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _audioService.setBgmSuspended(true);
+    });
   }
 
   void _playSound() {
@@ -56,6 +61,12 @@ class _DetailScreenState extends State<DetailScreen> {
       });
       _playSound();
     }
+  }
+
+  @override
+  void dispose() {
+    _audioService.setBgmSuspended(false);
+    super.dispose();
   }
 
   bool _isAlphabet() {
@@ -131,10 +142,13 @@ class _DetailScreenState extends State<DetailScreen> {
               const Spacer(flex: 2),
 
               // 1. Giant 3D Styled Character
-              Center(
-                child: Hero(
-                  tag: 'item_${_currentItem.label}',
-                  child: Chunky3DText(text: _currentItem.label),
+              GestureDetector(
+                onTap: _playSound,
+                child: Center(
+                  child: Hero(
+                    tag: 'item_${_currentItem.label}',
+                    child: Chunky3DText(text: _currentItem.label),
+                  ),
                 ),
               ),
 
@@ -153,7 +167,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     // Previous Button (Hidden if first)
                     SizedBox(
                       width: 80,
-                      height: 80,
+                      height: 70,
                       child: index > 0
                           ? GradientTriangleButton(
                               direction: AxisDirection.left,
@@ -165,29 +179,14 @@ class _DetailScreenState extends State<DetailScreen> {
                     // Sound Button (Professional Circular Gradient)
                     GestureDetector(
                       onTap: _playSound,
-                      child: Container(
-                        width: 90,
-                        height: 90,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFFB57AFF), Color(0xFF7A4BFF)],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
+                      child: Center(
+                        child: Text(
+                          _currentItem.label,
+                          style: GoogleFonts.fredoka(
+                            color: Color.fromARGB(255, 140, 65, 232),
+                            fontSize: 110,
+                            fontWeight: FontWeight.w500,
                           ),
-                          border: Border.all(color: Colors.white, width: 4),
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color(0xFF7A4BFF).withOpacity(0.4),
-                              blurRadius: 15,
-                              offset: const Offset(0, 8),
-                            ),
-                          ],
-                        ),
-                        child: const Icon(
-                          Icons.volume_up_rounded,
-                          color: Colors.white,
-                          size: 45,
                         ),
                       ),
                     ),
@@ -195,7 +194,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     // Next Button (Hidden if last)
                     SizedBox(
                       width: 80,
-                      height: 80,
+                      height: 70,
                       child: index < list.length - 1
                           ? GradientTriangleButton(
                               direction: AxisDirection.right,
@@ -222,52 +221,12 @@ class Chunky3DText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const fontSize = 220.0;
-    const shadowColor = Color(0xFF8E24AA); // Purple
-    const fillColor = Color(0xFFFFD54F); // Yellow
+    final bool isNumber = double.tryParse(text) != null;
+    final String assetPath = isNumber
+        ? 'assets/images/123_numbers/$text.png'
+        : 'assets/images/abc_letters/${text.toLowerCase()}.png';
 
-    return Stack(
-      children: [
-        // 1. Deep 3D Shadow (Multiple offsets for chunky feel)
-        Text(
-          text,
-          style: GoogleFonts.fredoka(
-            fontSize: fontSize,
-            fontWeight: FontWeight.w900,
-            foreground: Paint()
-              ..style = PaintingStyle.stroke
-              ..strokeWidth = 25
-              ..color = shadowColor
-              ..strokeJoin = StrokeJoin.round,
-          ),
-        ),
-        // 2. Extra Shadow Offset
-        Transform.translate(
-          offset: const Offset(0, 10),
-          child: Text(
-            text,
-            style: GoogleFonts.fredoka(
-              fontSize: fontSize,
-              fontWeight: FontWeight.w900,
-              foreground: Paint()
-                ..style = PaintingStyle.stroke
-                ..strokeWidth = 25
-                ..color = shadowColor
-                ..strokeJoin = StrokeJoin.round,
-            ),
-          ),
-        ),
-        // 3. Main Fill
-        Text(
-          text,
-          style: GoogleFonts.fredoka(
-            fontSize: fontSize,
-            fontWeight: FontWeight.w900,
-            color: fillColor,
-          ),
-        ),
-      ],
-    );
+    return Image.asset(assetPath, height: 300, fit: BoxFit.contain);
   }
 }
 

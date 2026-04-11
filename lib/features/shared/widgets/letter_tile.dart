@@ -14,6 +14,11 @@ class LetterTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isNumber = double.tryParse(label) != null;
+    final String assetPath = isNumber
+        ? 'assets/images/123_numbers/$label.png'
+        : 'assets/images/abc_letters/${label.toLowerCase()}.png';
+
     return Card(
       color: backgroundColor,
       shape: RoundedRectangleBorder(
@@ -22,13 +27,12 @@ class LetterTile extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
         onTap: onTap,
-        child: Center(
-          child: Text(
-            label,
-            style: const TextStyle(
-              fontSize: 48,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Center(
+            child: Image.asset(
+              assetPath,
+              fit: BoxFit.contain,
             ),
           ),
         ),

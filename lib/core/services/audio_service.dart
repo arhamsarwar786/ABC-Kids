@@ -7,6 +7,7 @@ class AudioService extends ChangeNotifier with WidgetsBindingObserver {
   final AudioPlayer _bgmPlayer = AudioPlayer();
   final AudioPlayer _sfxPlayer = AudioPlayer();
   bool _isAppInForeground = true;
+  bool _isBgmSuspended = false;
 
   bool get isMuted => AppPreferences.isSoundMuted;
 
@@ -22,7 +23,7 @@ class AudioService extends ChangeNotifier with WidgetsBindingObserver {
       _bgmPlayer.pause();
     } else if (state == AppLifecycleState.resumed) {
       _isAppInForeground = true;
-      if (!isMuted) {
+      if (!isMuted && !_isBgmSuspended) {
         playBackgroundMusic();
       }
     }
@@ -68,6 +69,17 @@ class AudioService extends ChangeNotifier with WidgetsBindingObserver {
 
   Future<void> stopBackgroundMusic() async {
     await _bgmPlayer.pause();
+  }
+
+  void setBgmSuspended(bool suspended) {
+    _isBgmSuspended = suspended;
+    if (suspended) {
+      stopBackgroundMusic();
+    } else {
+      if (_isAppInForeground) {
+        playBackgroundMusic();
+      }
+    }
   }
 
   Future<void> playNumber(int number) async {
