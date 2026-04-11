@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/utils/app_colors.dart';
 
 class AppCard extends StatelessWidget {
   final String title;
@@ -46,7 +47,7 @@ class AppCard extends StatelessWidget {
               Icon(
                 Icons.arrow_forward_ios_rounded,
                 size: 64,
-                color: Theme.of(context).primaryColor.withOpacity(0.5),
+                color: AppColors.primary.withOpacity(0.5),
               ),
             ],
           ),

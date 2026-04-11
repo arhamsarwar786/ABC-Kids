@@ -5,6 +5,7 @@ import '../model/learning_item.dart';
 import '../viewmodel/learning_viewmodel.dart';
 import '../../../core/services/audio_service.dart';
 import '../../../core/constants/app_assets.dart';
+import '../../../core/utils/app_colors.dart';
 
 class DetailScreen extends StatefulWidget {
   final LearningItem item;
@@ -83,18 +84,18 @@ class _DetailScreenState extends State<DetailScreen> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       appBar: AppBar(
         title: Text(
           "Let's Learn",
           style: GoogleFonts.fredoka(
-            color: const Color(0xFF5D5D5D),
+            color: AppColors.grey,
             fontWeight: FontWeight.w900,
             fontSize: 32,
           ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         elevation: 0,
         leading: Padding(
           padding: const EdgeInsets.only(left: 12),
@@ -107,13 +108,13 @@ class _DetailScreenState extends State<DetailScreen> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: const LinearGradient(
-                    colors: [Color(0xFFB57AFF), Color(0xFF7A4BFF)],
+                    colors: [AppColors.gradientStart, AppColors.gradientEnd],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
+                      color: AppColors.shadowColor,
                       blurRadius: 4,
                       offset: const Offset(0, 2),
                     ),
@@ -121,7 +122,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 ),
                 child: const Icon(
                   Icons.arrow_back,
-                  color: Colors.white,
+                  color: AppColors.white,
                   size: 24,
                 ),
               ),
@@ -183,7 +184,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         child: Text(
                           _currentItem.label,
                           style: GoogleFonts.fredoka(
-                            color: Color.fromARGB(255, 140, 65, 232),
+                            color: AppColors.purpleText,
                             fontSize: 110,
                             fontWeight: FontWeight.w500,
                           ),
@@ -258,7 +259,7 @@ class GradientTriangleButton extends StatelessWidget {
             isLeft
                 ? Icons.arrow_back_ios_new_rounded
                 : Icons.arrow_forward_ios_rounded,
-            color: Colors.white,
+            color: AppColors.white,
             size: 30,
           ),
         ),
@@ -275,7 +276,7 @@ class TrianglePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..shader = const LinearGradient(
-        colors: [Color(0xFFB57AFF), Color(0xFF7A4BFF)],
+        colors: [AppColors.gradientStart, AppColors.gradientEnd],
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
       ).createShader(Offset.zero & size)
@@ -319,12 +320,12 @@ class TrianglePainter extends CustomPainter {
     path.close();
 
     // Draw shadow first
-    canvas.drawShadow(path.shift(const Offset(0, 4)), Colors.black26, 6, true);
+    canvas.drawShadow(path.shift(const Offset(0, 4)), AppColors.black26, 6, true);
     canvas.drawPath(path, paint);
 
     // Draw white border for professional look
     final borderPaint = Paint()
-      ..color = Colors.white
+      ..color = AppColors.white
       ..style = PaintingStyle.stroke
       ..strokeWidth = 4
       ..strokeCap = StrokeCap.round

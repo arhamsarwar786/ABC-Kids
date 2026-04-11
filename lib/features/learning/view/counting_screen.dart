@@ -5,6 +5,7 @@ import '../../../app/routes/app_routes.dart';
 import '../../../app/theme/app_theme.dart';
 import '../../../core/services/audio_service.dart';
 import '../../../core/constants/app_assets.dart';
+import '../../../core/utils/app_colors.dart';
 import '../../shared/widgets/letter_tile.dart';
 import '../viewmodel/learning_viewmodel.dart';
 
@@ -45,18 +46,18 @@ class _CountingScreenState extends State<CountingScreen> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       appBar: AppBar(
         title: Text(
           'The Numbers',
           style: GoogleFonts.fredoka(
-            color: const Color(0xFF5D5D5D),
+            color: AppColors.grey,
             fontWeight: FontWeight.w900,
             fontSize: 28,
           ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         elevation: 0,
         leading: Padding(
           padding: const EdgeInsets.only(left: 12),
@@ -69,13 +70,13 @@ class _CountingScreenState extends State<CountingScreen> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: const LinearGradient(
-                    colors: [Color(0xFFB57AFF), Color(0xFF7A4BFF)],
+                    colors: [AppColors.gradientStart, AppColors.gradientEnd],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
+                      color: AppColors.shadowColor,
                       blurRadius: 4,
                       offset: const Offset(0, 2),
                     ),
@@ -83,7 +84,7 @@ class _CountingScreenState extends State<CountingScreen> {
                 ),
                 child: const Icon(
                   Icons.arrow_back,
-                  color: Colors.white,
+                  color: AppColors.white,
                   size: 24,
                 ),
               ),

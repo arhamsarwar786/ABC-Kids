@@ -3,6 +3,7 @@ import '../../../app/routes/app_routes.dart';
 import '../../../core/utils/app_preferences.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../app/theme/app_theme.dart';
+import '../../../core/utils/app_colors.dart';
 import 'onboarding_pages.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -70,14 +71,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     child: Center(
                       child: Container(
                         padding: const EdgeInsets.all(40),
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
+                        decoration: const BoxDecoration(
+                          color: AppColors.transparent,
                           shape: BoxShape.circle,
                         ),
                         child: Icon(
                           page.iconPath,
                           size: 140,
-                          color: Colors.transparent,
+                          color: AppColors.transparent,
                         ),
                       ),
                     ),
@@ -93,14 +94,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         vertical: 40,
                       ),
                       decoration: const BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.white,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(50),
                           topRight: Radius.circular(50),
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black12,
+                            color: AppColors.black12,
                             blurRadius: 15,
                             offset: Offset(0, -5),
                           ),
@@ -114,7 +115,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             style: const TextStyle(
                               fontSize: 36,
                               fontWeight: FontWeight.w900,
-                              color: AppTheme.secondaryColor,
+                              color: AppColors.secondary,
                             ),
                             textAlign: TextAlign.center,
                           ),
@@ -124,7 +125,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
-                              color: AppTheme.textColor.withOpacity(0.7),
+                              color: AppColors.text.withOpacity(0.7),
                               height: 1.5,
                             ),
                             textAlign: TextAlign.center,
@@ -147,7 +148,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: const Text(
                 'Skip',
                 style: TextStyle(
-                  color: AppTheme.textColor,
+                  color: AppColors.text,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -177,8 +178,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         height: 10,
                         decoration: BoxDecoration(
                           color: _currentPage == index
-                              ? AppTheme.primaryColor
-                              : AppTheme.primaryColor.withOpacity(0.2),
+                              ? AppColors.primary
+                              : AppColors.primary.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(5),
                         ),
                       ),
@@ -195,8 +196,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
                           colors: [
-                            AppTheme.secondaryColor,
-                            AppTheme.accentPink,
+                            AppColors.secondary,
+                            AppColors.pink,
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
@@ -204,7 +205,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: AppTheme.secondaryColor.withOpacity(0.3),
+                            color: AppColors.secondary.withOpacity(0.3),
                             blurRadius: 10,
                             offset: const Offset(0, 5),
                           ),
@@ -216,7 +217,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             ? 'GET STARTED'
                             : 'NEXT',
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: AppColors.white,
                           fontSize: 20,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 1.2,
