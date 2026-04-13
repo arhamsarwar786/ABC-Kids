@@ -46,6 +46,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final bool isSmall = screenHeight < 682;
+
     return Scaffold(
       body: Stack(
         children: [
@@ -89,9 +92,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     flex: 5,
                     child: Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                         horizontal: 32,
-                        vertical: 40,
+                        vertical: isSmall ? 20 : 40,
                       ),
                       decoration: const BoxDecoration(
                         color: AppColors.white,
@@ -112,18 +115,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         children: [
                           Text(
                             page.title,
-                            style: const TextStyle(
-                              fontSize: 36,
+                            style: TextStyle(
+                              fontSize: isSmall ? 26 : 36,
                               fontWeight: FontWeight.w900,
                               color: AppColors.secondary,
                             ),
                             textAlign: TextAlign.center,
                           ),
-                          const SizedBox(height: 16),
+                          SizedBox(height: isSmall ? 8 : 16),
                           Text(
                             page.description,
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: isSmall ? 16 : 18,
                               fontWeight: FontWeight.w500,
                               color: AppColors.text.withOpacity(0.7),
                               height: 1.5,
@@ -158,7 +161,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
           // 4. Fixed Bottom Controller (System)
           Positioned(
-            bottom: 40,
+            bottom: isSmall ? 20 : 40,
             left: 32,
             right: 32,
             child: SafeArea(
@@ -185,20 +188,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 32),
+                  SizedBox(height: isSmall ? 16 : 32),
 
                   // Professional Button System
                   GestureDetector(
                     onTap: _onNext,
                     child: Container(
                       width: double.infinity,
-                      height: 65,
+                      height: isSmall ? 50 : 65,
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
-                          colors: [
-                            AppColors.secondary,
-                            AppColors.pink,
-                          ],
+                          colors: [AppColors.secondary, AppColors.pink],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
@@ -216,9 +216,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         _currentPage == onboardingPages.length - 1
                             ? 'GET STARTED'
                             : 'NEXT',
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.white,
-                          fontSize: 20,
+                          fontSize: isSmall ? 16 : 20,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 1.2,
                         ),

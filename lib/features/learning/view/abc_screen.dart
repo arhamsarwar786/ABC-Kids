@@ -17,23 +17,6 @@ class AbcScreen extends StatefulWidget {
 }
 
 class _AbcScreenState extends State<AbcScreen> {
-  late AudioService _audioService;
-
-  @override
-  void initState() {
-    super.initState();
-    _audioService = context.read<AudioService>();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _audioService.setBgmSuspended(true);
-    });
-  }
-
-  @override
-  void dispose() {
-    _audioService.setBgmSuspended(false);
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final letters = context.read<LearningViewModel>().alphabets;

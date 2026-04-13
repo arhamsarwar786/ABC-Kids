@@ -17,23 +17,6 @@ class CountingScreen extends StatefulWidget {
 }
 
 class _CountingScreenState extends State<CountingScreen> {
-  late AudioService _audioService;
-
-  @override
-  void initState() {
-    super.initState();
-    _audioService = context.read<AudioService>();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _audioService.setBgmSuspended(true);
-    });
-  }
-
-  @override
-  void dispose() {
-    _audioService.setBgmSuspended(false);
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final numbers = context.read<LearningViewModel>().numbers;

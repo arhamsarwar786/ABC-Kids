@@ -83,7 +83,6 @@ class AudioService extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   Future<void> playNumber(int number) async {
-    if (isMuted) return;
 
     final fullPath = CountingAudioAssets.numbers[number];
     if (fullPath != null) {
@@ -94,7 +93,6 @@ class AudioService extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   Future<void> playLetter(String letter) async {
-    if (isMuted) return;
 
     final fullPath = AlphabetAudioAssets.letters[letter.toLowerCase()];
     if (fullPath != null) {
@@ -105,7 +103,6 @@ class AudioService extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   Future<void> playSound(String fullPath) async {
-    if (isMuted) return;
     _playSfx(fullPath);
   }
 
