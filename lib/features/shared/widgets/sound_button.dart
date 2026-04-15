@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/utils/app_colors.dart';
 
 class SoundButton extends StatelessWidget {
   final VoidCallback onPressed;
@@ -13,7 +14,7 @@ class SoundButton extends StatelessWidget {
         shape: BoxShape.circle,
         boxShadow: const [
           BoxShadow(
-            color: Colors.black26,
+            color: AppColors.black26,
             blurRadius: 10,
             offset: Offset(0, 5),
           ),
@@ -21,7 +22,7 @@ class SoundButton extends StatelessWidget {
       ),
       child: IconButton(
         iconSize: 64,
-        icon: const Icon(Icons.volume_up_rounded, color: Colors.white),
+        icon: const Icon(Icons.volume_up_rounded, color: AppColors.white),
         onPressed: onPressed,
       ),
     );

@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../viewmodel/settings_viewmodel.dart';
 import '../../../core/services/audio_service.dart';
 import '../../../core/constants/app_assets.dart';
+import '../../../core/utils/app_colors.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -15,18 +16,18 @@ class SettingsScreen extends StatelessWidget {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       appBar: AppBar(
         title: Text(
           'Setting',
           style: GoogleFonts.fredoka(
-            color: const Color(0xFF5D5D5D),
+            color: AppColors.grey,
             fontWeight: FontWeight.w900,
             fontSize: 32,
           ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         elevation: 0,
         leading: Padding(
           padding: const EdgeInsets.only(left: 16),
@@ -36,13 +37,13 @@ class SettingsScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 gradient: const LinearGradient(
-                  colors: [Color(0xFFB57AFF), Color(0xFF7A4BFF)],
+                  colors: [AppColors.gradientStart, AppColors.gradientEnd],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
+                    color: AppColors.shadowColor,
                     blurRadius: 4,
                     offset: const Offset(0, 2),
                   ),
@@ -50,7 +51,7 @@ class SettingsScreen extends StatelessWidget {
               ),
               child: const Icon(
                 Icons.arrow_back,
-                color: Colors.white,
+                color: AppColors.white,
                 size: 32,
               ),
             ),
@@ -78,7 +79,7 @@ class SettingsScreen extends StatelessWidget {
                     icon: audioService.isMuted
                         ? Icons.volume_off_rounded
                         : Icons.volume_up_rounded,
-                    color: const Color(0xFFFF7675),
+                    color: AppColors.softRed,
                   ),
                 ),
                 const SizedBox(height: 40),
@@ -88,7 +89,7 @@ class SettingsScreen extends StatelessWidget {
                   onTap: () => viewModel.shareApp(),
                   child: const SettingCircleButton(
                     icon: Icons.share_rounded,
-                    color: Color(0xFFFF7675),
+                    color: AppColors.softRed,
                   ),
                 ),
 
@@ -120,12 +121,12 @@ class SettingCircleButton extends StatelessWidget {
       decoration: BoxDecoration(
         color: color,
         shape: BoxShape.circle,
-        border: Border.all(color: Colors.white, width: 4),
+        border: Border.all(color: AppColors.white, width: 4),
         boxShadow: const [
-          BoxShadow(color: Colors.black26, blurRadius: 6, offset: Offset(0, 3)),
+          BoxShadow(color: AppColors.black26, blurRadius: 6, offset: Offset(0, 3)),
         ],
       ),
-      child: Icon(icon, color: Colors.white, size: 50),
+      child: Icon(icon, color: AppColors.white, size: 50),
     );
   }
 }

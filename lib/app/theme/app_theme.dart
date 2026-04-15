@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../core/utils/app_colors.dart';
 
 class AppTheme {
-  static const Color primaryColor = Color(
-    0xFF4FC3F7,
-  ); // Kid friendly light blue
-  static const Color secondaryColor = Color(0xFFFFB74D); // Playful orange
-  static const Color backgroundColor = Color(
-    0xFFE1F5FE,
-  ); // Very light blue background
-  static const Color cardColor = Colors.white;
-  static const Color textColor = Color(
-    0xFF37474F,
-  ); // Dark slate for readable text
-  static const Color accentPink = Color(0xFFF06292);
-  static const Color accentGreen = Color(0xFF81C784);
+  static const Color primaryColor = AppColors.primary;
+  static const Color secondaryColor = AppColors.secondary;
+  static const Color backgroundColor = AppColors.background;
+  static const Color cardColor = AppColors.card;
+  static const Color textColor = AppColors.text;
+  static const Color accentPink = AppColors.pink;
+  static const Color accentGreen = AppColors.green;
 
   static ThemeData get lightTheme {
     return ThemeData(
@@ -24,7 +19,7 @@ class AppTheme {
       // Apply Fredoka globally as the font family
       fontFamily: GoogleFonts.fredoka().fontFamily,
       appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         elevation: 0,
         centerTitle: true,
         iconTheme: IconThemeData(color: textColor),
@@ -34,17 +29,17 @@ class AppTheme {
           fontWeight: FontWeight.w800,
         ),
         systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
+          statusBarColor: AppColors.transparent,
           statusBarIconBrightness: Brightness.dark,
-          systemNavigationBarColor: Colors.transparent,
+          systemNavigationBarColor: AppColors.transparent,
           systemNavigationBarIconBrightness: Brightness.dark,
-          systemNavigationBarDividerColor: Colors.transparent,
+          systemNavigationBarDividerColor: AppColors.transparent,
         ),
       ),
       cardTheme: CardThemeData(
         color: cardColor,
         elevation: 6,
-        shadowColor: Colors.black26,
+        shadowColor: AppColors.black26,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       ),
       textTheme: GoogleFonts.fredokaTextTheme(
@@ -69,7 +64,7 @@ class AppTheme {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: secondaryColor,
-          foregroundColor: Colors.white,
+          foregroundColor: AppColors.white,
           elevation: 4,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),

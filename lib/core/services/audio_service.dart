@@ -7,6 +7,7 @@ class AudioService extends ChangeNotifier with WidgetsBindingObserver {
   final AudioPlayer _bgmPlayer = AudioPlayer();
   final AudioPlayer _sfxPlayer = AudioPlayer();
   bool _isAppInForeground = true;
+  bool _isBgmSuspended = false;
 
   bool get isMuted => AppPreferences.isSoundMuted;
 
@@ -17,12 +18,13 @@ class AudioService extends ChangeNotifier with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive) {
       _isAppInForeground = false;
       _bgmPlayer.pause();
     } else if (state == AppLifecycleState.resumed) {
       _isAppInForeground = true;
-      if (!isMuted) {
+      if (!isMuted && !_isBgmSuspended) {
         playBackgroundMusic();
       }
     }
@@ -70,9 +72,18 @@ class AudioService extends ChangeNotifier with WidgetsBindingObserver {
     await _bgmPlayer.pause();
   }
 
-  Future<void> playNumber(int number) async {
-    if (isMuted) return;
+  void setBgmSuspended(bool suspended) {
+    _isBgmSuspended = suspended;
+    if (suspended) {
+      stopBackgroundMusic();
+    } else {
+      if (_isAppInForeground) {
+        playBackgroundMusic();
+      }
+    }
+  }
 
+  Future<void> playNumber(int number) async {
     final fullPath = CountingAudioAssets.numbers[number];
     if (fullPath != null) {
       _playSfx(fullPath);
@@ -82,8 +93,6 @@ class AudioService extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   Future<void> playLetter(String letter) async {
-    if (isMuted) return;
-
     final fullPath = AlphabetAudioAssets.letters[letter.toLowerCase()];
     if (fullPath != null) {
       _playSfx(fullPath);
@@ -93,7 +102,6 @@ class AudioService extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   Future<void> playSound(String fullPath) async {
-    if (isMuted) return;
     _playSfx(fullPath);
   }
 

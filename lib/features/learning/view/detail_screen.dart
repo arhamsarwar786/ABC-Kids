@@ -5,6 +5,7 @@ import '../model/learning_item.dart';
 import '../viewmodel/learning_viewmodel.dart';
 import '../../../core/services/audio_service.dart';
 import '../../../core/constants/app_assets.dart';
+import '../../../core/utils/app_colors.dart';
 
 class DetailScreen extends StatefulWidget {
   final LearningItem item;
@@ -16,12 +17,17 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen> {
   late LearningItem _currentItem;
+  late AudioService _audioService;
 
   @override
   void initState() {
     super.initState();
     _currentItem = widget.item;
+    _audioService = context.read<AudioService>();
     _playSound();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _audioService.setBgmSuspended(true);
+    });
   }
 
   void _playSound() {
@@ -58,6 +64,12 @@ class _DetailScreenState extends State<DetailScreen> {
     }
   }
 
+  @override
+  void dispose() {
+    _audioService.setBgmSuspended(false);
+    super.dispose();
+  }
+
   bool _isAlphabet() {
     return double.tryParse(_currentItem.label) == null;
   }
@@ -72,18 +84,18 @@ class _DetailScreenState extends State<DetailScreen> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       appBar: AppBar(
         title: Text(
           "Let's Learn",
           style: GoogleFonts.fredoka(
-            color: const Color(0xFF5D5D5D),
+            color: AppColors.grey,
             fontWeight: FontWeight.w900,
             fontSize: 32,
           ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         elevation: 0,
         leading: Padding(
           padding: const EdgeInsets.only(left: 12),
@@ -96,13 +108,13 @@ class _DetailScreenState extends State<DetailScreen> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: const LinearGradient(
-                    colors: [Color(0xFFB57AFF), Color(0xFF7A4BFF)],
+                    colors: [AppColors.gradientStart, AppColors.gradientEnd],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
+                      color: AppColors.shadowColor,
                       blurRadius: 4,
                       offset: const Offset(0, 2),
                     ),
@@ -110,7 +122,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 ),
                 child: const Icon(
                   Icons.arrow_back,
-                  color: Colors.white,
+                  color: AppColors.white,
                   size: 24,
                 ),
               ),
@@ -131,10 +143,13 @@ class _DetailScreenState extends State<DetailScreen> {
               const Spacer(flex: 2),
 
               // 1. Giant 3D Styled Character
-              Center(
-                child: Hero(
-                  tag: 'item_${_currentItem.label}',
-                  child: Chunky3DText(text: _currentItem.label),
+              GestureDetector(
+                onTap: _playSound,
+                child: Center(
+                  child: Hero(
+                    tag: 'item_${_currentItem.label}',
+                    child: Chunky3DText(text: _currentItem.label),
+                  ),
                 ),
               ),
 
@@ -153,7 +168,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     // Previous Button (Hidden if first)
                     SizedBox(
                       width: 80,
-                      height: 80,
+                      height: 70,
                       child: index > 0
                           ? GradientTriangleButton(
                               direction: AxisDirection.left,
@@ -165,29 +180,14 @@ class _DetailScreenState extends State<DetailScreen> {
                     // Sound Button (Professional Circular Gradient)
                     GestureDetector(
                       onTap: _playSound,
-                      child: Container(
-                        width: 90,
-                        height: 90,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFFB57AFF), Color(0xFF7A4BFF)],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
+                      child: Center(
+                        child: Text(
+                          _currentItem.label,
+                          style: GoogleFonts.fredoka(
+                            color: AppColors.purpleText,
+                            fontSize: 110,
+                            fontWeight: FontWeight.w500,
                           ),
-                          border: Border.all(color: Colors.white, width: 4),
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color(0xFF7A4BFF).withOpacity(0.4),
-                              blurRadius: 15,
-                              offset: const Offset(0, 8),
-                            ),
-                          ],
-                        ),
-                        child: const Icon(
-                          Icons.volume_up_rounded,
-                          color: Colors.white,
-                          size: 45,
                         ),
                       ),
                     ),
@@ -195,7 +195,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     // Next Button (Hidden if last)
                     SizedBox(
                       width: 80,
-                      height: 80,
+                      height: 70,
                       child: index < list.length - 1
                           ? GradientTriangleButton(
                               direction: AxisDirection.right,
@@ -222,52 +222,12 @@ class Chunky3DText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const fontSize = 220.0;
-    const shadowColor = Color(0xFF8E24AA); // Purple
-    const fillColor = Color(0xFFFFD54F); // Yellow
+    final bool isNumber = double.tryParse(text) != null;
+    final String assetPath = isNumber
+        ? 'assets/images/123_numbers/$text.png'
+        : 'assets/images/abc_letters/${text.toLowerCase()}.png';
 
-    return Stack(
-      children: [
-        // 1. Deep 3D Shadow (Multiple offsets for chunky feel)
-        Text(
-          text,
-          style: GoogleFonts.fredoka(
-            fontSize: fontSize,
-            fontWeight: FontWeight.w900,
-            foreground: Paint()
-              ..style = PaintingStyle.stroke
-              ..strokeWidth = 25
-              ..color = shadowColor
-              ..strokeJoin = StrokeJoin.round,
-          ),
-        ),
-        // 2. Extra Shadow Offset
-        Transform.translate(
-          offset: const Offset(0, 10),
-          child: Text(
-            text,
-            style: GoogleFonts.fredoka(
-              fontSize: fontSize,
-              fontWeight: FontWeight.w900,
-              foreground: Paint()
-                ..style = PaintingStyle.stroke
-                ..strokeWidth = 25
-                ..color = shadowColor
-                ..strokeJoin = StrokeJoin.round,
-            ),
-          ),
-        ),
-        // 3. Main Fill
-        Text(
-          text,
-          style: GoogleFonts.fredoka(
-            fontSize: fontSize,
-            fontWeight: FontWeight.w900,
-            color: fillColor,
-          ),
-        ),
-      ],
-    );
+    return Image.asset(assetPath, height: 300, fit: BoxFit.contain);
   }
 }
 
@@ -299,7 +259,7 @@ class GradientTriangleButton extends StatelessWidget {
             isLeft
                 ? Icons.arrow_back_ios_new_rounded
                 : Icons.arrow_forward_ios_rounded,
-            color: Colors.white,
+            color: AppColors.white,
             size: 30,
           ),
         ),
@@ -316,7 +276,7 @@ class TrianglePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..shader = const LinearGradient(
-        colors: [Color(0xFFB57AFF), Color(0xFF7A4BFF)],
+        colors: [AppColors.gradientStart, AppColors.gradientEnd],
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
       ).createShader(Offset.zero & size)
@@ -360,12 +320,12 @@ class TrianglePainter extends CustomPainter {
     path.close();
 
     // Draw shadow first
-    canvas.drawShadow(path.shift(const Offset(0, 4)), Colors.black26, 6, true);
+    canvas.drawShadow(path.shift(const Offset(0, 4)), AppColors.black26, 6, true);
     canvas.drawPath(path, paint);
 
     // Draw white border for professional look
     final borderPaint = Paint()
-      ..color = Colors.white
+      ..color = AppColors.white
       ..style = PaintingStyle.stroke
       ..strokeWidth = 4
       ..strokeCap = StrokeCap.round

@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../app/routes/app_routes.dart';
 import '../../../core/services/audio_service.dart';
 import '../../../core/constants/app_assets.dart';
+import '../../../core/utils/app_colors.dart';
 import '../viewmodel/home_viewmodel.dart';
 import 'dart:math' as math;
 
@@ -28,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final viewModel = context.watch<HomeViewModel>();
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -57,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             style: GoogleFonts.fredoka(
                               fontSize: 52,
                               fontWeight: FontWeight.w900,
-                              color: const Color(0xFF5D5D5D),
+                              color: AppColors.grey,
                             ),
                           ),
                           RichText(
@@ -65,14 +66,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               style: GoogleFonts.fredoka(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w500,
-                                color: const Color(0xFF5D5D5D).withOpacity(0.7),
+                                color: AppColors.grey.withOpacity(0.7),
                               ),
                               children: [
                                 const TextSpan(text: 'Welcome back to the '),
                                 TextSpan(
                                   text: 'ABC Kids',
                                   style: TextStyle(
-                                    color: const Color(0xFFFF7675),
+                                    color: AppColors.softRed,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
@@ -92,12 +93,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: 64,
                         height: 64,
                         decoration: BoxDecoration(
-                          color: const Color(0xFFFF7675),
+                          color: AppColors.softRed,
                           shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 4),
+                          border: Border.all(color: AppColors.white, width: 4),
                           boxShadow: const [
                             BoxShadow(
-                              color: Colors.black26,
+                              color: AppColors.black26,
                               blurRadius: 4,
                               offset: Offset(0, 2),
                             ),
@@ -105,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         child: const Icon(
                           Icons.settings_rounded,
-                          color: Colors.white,
+                          color: AppColors.white,
                           size: 36,
                         ),
                       ),
@@ -122,8 +123,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       // ABC Card
                       CategoryCard(
-                        backgroundColor: const Color(0xFFFF7474),
-                        buttonColor: const Color(0xFF9C27B0), // Purple
+                        backgroundColor: AppColors.lightBlue, // Light Blue
+                        buttonColor: AppColors.purple, // Purple
                         title: 'Learn Words',
                         onTap: () {
                           viewModel.handleNavigation(() {
@@ -131,47 +132,41 @@ class _HomeScreenState extends State<HomeScreen> {
                           });
                         },
                         centerGraphic: SizedBox(
-                          width: 220,
-                          height: 120,
+                          width: 260,
+                          height: 200,
                           child: Stack(
                             alignment: Alignment.center,
                             children: [
                               Positioned(
-                                left: 10,
-                                top: 0,
+                                left: -6,
+                                top: 22,
                                 child: Transform.rotate(
                                   angle: -0.1,
-                                  child: const OutlinedText(
-                                    text: 'A',
-                                    fontSize: 85,
-                                    textColor: Color(0xFFFFD54F),
-                                    outlineColor: Color(0xFF7B1FA2),
+                                  child: Image.asset(
+                                    'assets/images/abc_letters/a.png',
+                                    height: 130,
                                   ),
                                 ),
                               ),
                               Positioned(
-                                left: 85,
-                                top: -10,
+                                left: 75,
+                                top: -6,
                                 child: Transform.rotate(
                                   angle: 0.1,
-                                  child: const OutlinedText(
-                                    text: 'B',
-                                    fontSize: 75,
-                                    textColor: Color(0xFFFFD54F),
-                                    outlineColor: Color(0xFF7B1FA2),
+                                  child: Image.asset(
+                                    'assets/images/abc_letters/b.png',
+                                    height: 120,
                                   ),
                                 ),
                               ),
                               Positioned(
-                                right: 10,
-                                top: 15,
+                                right: -6,
+                                top: 24,
                                 child: Transform.rotate(
                                   angle: 0.15,
-                                  child: const OutlinedText(
-                                    text: 'C',
-                                    fontSize: 85,
-                                    textColor: Color(0xFFFFD54F),
-                                    outlineColor: Color(0xFF7B1FA2),
+                                  child: Image.asset(
+                                    'assets/images/abc_letters/c.png',
+                                    height: 130,
                                   ),
                                 ),
                               ),
@@ -184,42 +179,41 @@ class _HomeScreenState extends State<HomeScreen> {
 
                       // 123 Card
                       CategoryCard(
-                        backgroundColor: const Color(0xFF7FA3FF), // Light Blue
-                        buttonColor: const Color(0xFF3F51B5), // Dark Blue
+                        backgroundColor: AppColors.lightBlue, // Light Blue
+                        buttonColor: AppColors.purple, // Dark Blue
                         title: 'Play Numbers',
                         onTap: () {
                           viewModel.handleNavigation(() {
                             Navigator.pushNamed(context, AppRoutes.counting);
                           });
                         },
-                        centerGraphic: const SizedBox(
-                          width: 240,
-                          height: 140,
+                        centerGraphic: SizedBox(
+                          width: 260,
+                          height: 200,
                           child: Stack(
                             alignment: Alignment.center,
                             children: [
                               Positioned(
-                                left: 20,
-                                bottom: 6,
-                                child: NumberCircle(
-                                  numStr: '1',
-                                  bgColor: Color(0xFFFF5252),
-                                ),
-                              ),
-                              Positioned(
-                                right: 20,
-                                bottom: 6,
-                                child: NumberCircle(
-                                  numStr: '3',
-                                  bgColor: Color(0xFF40C4FF),
-                                ),
-                              ),
-                              Positioned(
                                 top: 0,
-                                child: NumberCircle(
-                                  numStr: '2',
-                                  bgColor: Color(0xFFFFE57F),
-                                  scale: 1.1,
+                                child: Image.asset(
+                                  'assets/images/123_numbers/2.png',
+                                  height: 120,
+                                ),
+                              ),
+                              Positioned(
+                                left: 5,
+                                bottom: 40,
+                                child: Image.asset(
+                                  'assets/images/123_numbers/1.png',
+                                  height: 130,
+                                ),
+                              ),
+                              Positioned(
+                                right: 5,
+                                bottom: 45,
+                                child: Image.asset(
+                                  'assets/images/123_numbers/3.png',
+                                  height: 130,
                                 ),
                               ),
                             ],
@@ -272,7 +266,7 @@ class CategoryCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(32),
           boxShadow: const [
             BoxShadow(
-              color: Colors.black12,
+              color: AppColors.black12,
               blurRadius: 10,
               offset: Offset(0, 5),
             ),
@@ -290,7 +284,7 @@ class CategoryCard extends StatelessWidget {
               child: Text(
                 title,
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: AppColors.white,
                   fontSize: 24,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 1.2,
@@ -310,7 +304,7 @@ class CategoryCard extends StatelessWidget {
                   shape: BoxShape.circle,
                   boxShadow: const [
                     BoxShadow(
-                      color: Colors.black26,
+                      color: AppColors.black26,
                       blurRadius: 6,
                       offset: Offset(0, 3),
                     ),
@@ -318,7 +312,7 @@ class CategoryCard extends StatelessWidget {
                 ),
                 child: const Icon(
                   Icons.arrow_forward_rounded,
-                  color: Colors.white,
+                  color: AppColors.white,
                   size: 36,
                 ),
               ),
@@ -330,6 +324,7 @@ class CategoryCard extends StatelessWidget {
   }
 }
 
+//NOt Used
 class OutlinedText extends StatelessWidget {
   final String text;
   final double fontSize;
@@ -397,9 +392,13 @@ class NumberCircle extends StatelessWidget {
       decoration: BoxDecoration(
         color: bgColor,
         shape: BoxShape.circle,
-        border: Border.all(color: Colors.white, width: 4),
+        border: Border.all(color: AppColors.white, width: 4),
         boxShadow: const [
-          BoxShadow(color: Colors.black26, blurRadius: 6, offset: Offset(0, 3)),
+          BoxShadow(
+            color: AppColors.black26,
+            blurRadius: 6,
+            offset: Offset(0, 3),
+          ),
         ],
       ),
       alignment: Alignment.center,
@@ -407,7 +406,7 @@ class NumberCircle extends StatelessWidget {
         numStr,
         style: TextStyle(
           fontSize: 50 * scale,
-          color: numStr == '2' ? Colors.black87 : Colors.white,
+          color: numStr == '2' ? AppColors.black87 : AppColors.white,
           fontWeight: FontWeight.w900,
         ),
       ),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../../../app/routes/app_routes.dart';
 import '../../../core/utils/app_preferences.dart';
 import '../../../core/constants/app_assets.dart';
+import '../../../app/theme/app_theme.dart';
+import '../../../core/utils/app_colors.dart';
 import 'onboarding_pages.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -44,6 +46,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final bool isSmall = screenHeight < 682;
+
     return Scaffold(
       body: Stack(
         children: [
@@ -69,14 +74,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     child: Center(
                       child: Container(
                         padding: const EdgeInsets.all(40),
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
+                        decoration: const BoxDecoration(
+                          color: AppColors.transparent,
                           shape: BoxShape.circle,
                         ),
                         child: Icon(
                           page.iconPath,
                           size: 140,
-                          color: Colors.transparent,
+                          color: AppColors.transparent,
                         ),
                       ),
                     ),
@@ -87,19 +92,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     flex: 5,
                     child: Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                         horizontal: 32,
-                        vertical: 40,
+                        vertical: isSmall ? 20 : 40,
                       ),
                       decoration: const BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.white,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(50),
                           topRight: Radius.circular(50),
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black12,
+                            color: AppColors.black12,
                             blurRadius: 15,
                             offset: Offset(0, -5),
                           ),
@@ -110,20 +115,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         children: [
                           Text(
                             page.title,
-                            style: const TextStyle(
-                              fontSize: 36,
+                            style: TextStyle(
+                              fontSize: isSmall ? 26 : 36,
                               fontWeight: FontWeight.w900,
-                              color: Color(0xFF3F51B5), // Indigo
+                              color: AppColors.secondary,
                             ),
                             textAlign: TextAlign.center,
                           ),
-                          const SizedBox(height: 16),
+                          SizedBox(height: isSmall ? 8 : 16),
                           Text(
                             page.description,
-                            style: const TextStyle(
-                              fontSize: 18,
+                            style: TextStyle(
+                              fontSize: isSmall ? 16 : 18,
                               fontWeight: FontWeight.w500,
-                              color: Color(0xFF757575), // Slate Gray
+                              color: AppColors.text.withOpacity(0.7),
                               height: 1.5,
                             ),
                             textAlign: TextAlign.center,
@@ -139,14 +144,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
           // 3. Skip Button (Top Right)
           Positioned(
-            top: 60,
-            right: 20,
+            top: 44,
+            left: 16,
             child: TextButton(
               onPressed: _onSkip,
               child: const Text(
                 'Skip',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: AppColors.text,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -156,7 +161,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
           // 4. Fixed Bottom Controller (System)
           Positioned(
-            bottom: 40,
+            bottom: isSmall ? 20 : 40,
             left: 32,
             right: 32,
             child: SafeArea(
@@ -176,31 +181,31 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         height: 10,
                         decoration: BoxDecoration(
                           color: _currentPage == index
-                              ? const Color(0xFF3F51B5)
-                              : const Color(0xFF3F51B5).withOpacity(0.2),
+                              ? AppColors.primary
+                              : AppColors.primary.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(5),
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 32),
+                  SizedBox(height: isSmall ? 16 : 32),
 
                   // Professional Button System
                   GestureDetector(
                     onTap: _onNext,
                     child: Container(
                       width: double.infinity,
-                      height: 65,
+                      height: isSmall ? 50 : 65,
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
-                          colors: [Color(0xFFB57AFF), Color(0xFF7A4BFF)],
+                          colors: [AppColors.secondary, AppColors.pink],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFF7A4BFF).withOpacity(0.3),
+                            color: AppColors.secondary.withOpacity(0.3),
                             blurRadius: 10,
                             offset: const Offset(0, 5),
                           ),
@@ -211,9 +216,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         _currentPage == onboardingPages.length - 1
                             ? 'GET STARTED'
                             : 'NEXT',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
+                        style: TextStyle(
+                          color: AppColors.white,
+                          fontSize: isSmall ? 16 : 20,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 1.2,
                         ),
