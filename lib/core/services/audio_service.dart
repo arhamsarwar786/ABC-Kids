@@ -18,7 +18,8 @@ class AudioService extends ChangeNotifier with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive) {
       _isAppInForeground = false;
       _bgmPlayer.pause();
     } else if (state == AppLifecycleState.resumed) {
@@ -83,7 +84,6 @@ class AudioService extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   Future<void> playNumber(int number) async {
-
     final fullPath = CountingAudioAssets.numbers[number];
     if (fullPath != null) {
       _playSfx(fullPath);
@@ -93,7 +93,6 @@ class AudioService extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   Future<void> playLetter(String letter) async {
-
     final fullPath = AlphabetAudioAssets.letters[letter.toLowerCase()];
     if (fullPath != null) {
       _playSfx(fullPath);

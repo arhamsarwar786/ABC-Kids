@@ -324,6 +324,7 @@ class CategoryCard extends StatelessWidget {
   }
 }
 
+//NOt Used
 class OutlinedText extends StatelessWidget {
   final String text;
   final double fontSize;
@@ -393,7 +394,11 @@ class NumberCircle extends StatelessWidget {
         shape: BoxShape.circle,
         border: Border.all(color: AppColors.white, width: 4),
         boxShadow: const [
-          BoxShadow(color: AppColors.black26, blurRadius: 6, offset: Offset(0, 3)),
+          BoxShadow(
+            color: AppColors.black26,
+            blurRadius: 6,
+            offset: Offset(0, 3),
+          ),
         ],
       ),
       alignment: Alignment.center,
