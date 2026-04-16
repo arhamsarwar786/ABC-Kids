@@ -71,6 +71,7 @@ flutter:
     - "assets/audio/background sound/"
     - assets/audio/abc_letter_sound/
     - assets/audio/0-to-10_counting/
+    - assets/images/home-page-characters/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

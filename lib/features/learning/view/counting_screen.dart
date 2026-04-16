@@ -21,10 +21,12 @@ class _CountingScreenState extends State<CountingScreen> {
   Widget build(BuildContext context) {
     final numbers = context.read<LearningViewModel>().numbers;
     final colors = [
-      AppTheme.accentGreen,
-      AppTheme.primaryColor,
-      AppTheme.accentPink,
-      AppTheme.secondaryColor,
+      const Color(0xFF81C784), // Green
+      const Color(0xFF7FA3FF), // Light Blue
+      const Color(0xFFFF7675), // Soft Red
+      const Color(0xFFFFB74D), // Orange
+      const Color(0xFFBA68C8), // Medium Purple
+      const Color(0xFFF06292), // Pink
     ];
 
     return Scaffold(

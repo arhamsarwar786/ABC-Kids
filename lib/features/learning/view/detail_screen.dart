@@ -34,6 +34,31 @@ class _DetailScreenState extends State<DetailScreen> {
     context.read<AudioService>().playSound(_currentItem.audioFileName);
   }
 
+  void _showSpeedDialog() {
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: false,
+      barrierLabel: "Speed",
+      barrierColor: Colors.black.withOpacity(0.35),
+      transitionDuration: const Duration(milliseconds: 280),
+      pageBuilder: (_, __, ___) => const SizedBox(),
+      transitionBuilder: (context, animation, _, child) {
+        final curved = CurvedAnimation(
+          parent: animation,
+          curve: Curves.easeOutCubic,
+        );
+
+        return Transform.scale(
+          scale: Tween(begin: 0.85, end: 1.0).evaluate(curved),
+          child: Opacity(
+            opacity: animation.value,
+            child: Center(child: _SpeedPopupContent()),
+          ),
+        );
+      },
+    );
+  }
+
   void _goToPrevious() {
     final viewModel = context.read<LearningViewModel>();
     List<LearningItem> list = _isAlphabet()
@@ -129,6 +154,33 @@ class _DetailScreenState extends State<DetailScreen> {
             ),
           ),
         ),
+
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: GestureDetector(
+              onTap: _showSpeedDialog,
+              child: Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: const LinearGradient(
+                    colors: [AppColors.gradientStart, AppColors.gradientEnd],
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.shadowColor,
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: const Icon(Icons.speed, color: AppColors.white),
+              ),
+            ),
+          ),
+        ],
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -153,12 +205,76 @@ class _DetailScreenState extends State<DetailScreen> {
                 ),
               ),
 
-              const Spacer(flex: 3),
+              const Spacer(flex: 1),
 
-              // 2. Navigation Control Center (Bottom)
+              // 2. Pronunciation Speed Controller
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 40),
+              //   child: Column(
+              //     children: [
+              //       Row(
+              //         mainAxisAlignment: MainAxisAlignment.center,
+              //         children: [
+              //           const Icon(
+              //             Icons.speed,
+              //             color: AppColors.grey,
+              //             size: 20,
+              //           ),
+              //           const SizedBox(width: 10),
+              //           Text(
+              //             "Pronunciation Speed",
+              //             style: GoogleFonts.fredoka(
+              //               color: AppColors.grey,
+              //               fontWeight: FontWeight.w600,
+              //               fontSize: 18,
+              //             ),
+              //           ),
+              //         ],
+              //       ),
+              //       Consumer<AudioService>(
+              //         builder: (context, audioService, child) {
+              //           return SliderTheme(
+              //             data: SliderTheme.of(context).copyWith(
+              //               activeTrackColor: AppColors.gradientStart,
+              //               inactiveTrackColor: AppColors.gradientStart
+              //                   .withOpacity(0.2),
+              //               thumbColor: AppColors.gradientEnd,
+              //               overlayColor: AppColors.gradientEnd.withOpacity(
+              //                 0.2,
+              //               ),
+              //               trackHeight: 10,
+              //               valueIndicatorColor: AppColors.gradientEnd,
+              //               valueIndicatorTextStyle: GoogleFonts.fredoka(
+              //                 color: AppColors.white,
+              //                 fontWeight: FontWeight.bold,
+              //               ),
+              //               thumbShape: const RoundSliderThumbShape(
+              //                 enabledThumbRadius: 12,
+              //                 elevation: 4,
+              //               ),
+              //             ),
+              //             child: Slider(
+              //               value: audioService.playbackRate,
+              //               min: 0.5,
+              //               max: 2.0,
+              //               divisions: 6,
+              //               label: "${audioService.playbackRate}x",
+              //               onChanged: (value) {
+              //                 audioService.setPlaybackRate(value);
+              //               },
+              //             ),
+              //           );
+              //         },
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              const Spacer(flex: 2),
+
+              // 3. Navigation Control Center (Bottom)
               Padding(
                 padding: const EdgeInsets.only(
-                  bottom: 160,
+                  bottom: 150,
                   left: 30,
                   right: 30,
                 ),
@@ -214,8 +330,197 @@ class _DetailScreenState extends State<DetailScreen> {
   }
 }
 
-// --- Specialized UI Widgets for Detail Screen ---
+//
+class _SpeedPopupContent extends StatefulWidget {
+  const _SpeedPopupContent();
 
+  @override
+  State<_SpeedPopupContent> createState() => _SpeedPopupContentState();
+}
+
+class _SpeedPopupContentState extends State<_SpeedPopupContent> {
+  late double tempSpeed;
+  late double originalSpeed;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final audio = context.read<AudioService>();
+
+    originalSpeed = audio.playbackRate;
+    tempSpeed = originalSpeed;
+  }
+
+  /// preview pronunciation when user releases slider
+  void _preview(AudioService audio) {
+    audio.setPlaybackRate(tempSpeed);
+
+    /// play once for preview
+    audio.playCurrent(); // ⚠️ see NOTE below
+  }
+
+  void _save(AudioService audio) {
+    audio.setPlaybackRate(tempSpeed);
+    Navigator.pop(context);
+  }
+
+  void _cancel(AudioService audio) {
+    audio.setPlaybackRate(originalSpeed);
+    Navigator.pop(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final audio = context.read<AudioService>();
+
+    return Material(
+      color: Colors.transparent,
+      child: Container(
+        width: 360,
+        padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 28),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30),
+          gradient: const LinearGradient(
+            colors: [AppColors.gradientStart, AppColors.gradientEnd],
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.shadowColor.withOpacity(.35),
+              blurRadius: 40,
+              offset: const Offset(0, 18),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            /// HEADER
+            Row(
+              children: const [
+                Icon(Icons.speed, color: AppColors.white, size: 30),
+                SizedBox(width: 12),
+                Text(
+                  "Pronunciation Speed",
+                  style: TextStyle(
+                    color: AppColors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 30),
+
+            /// GLASS CARD
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+              decoration: BoxDecoration(
+                color: AppColors.white.withOpacity(.15),
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: Column(
+                children: [
+                  /// SPEED TEXT
+                  Text(
+                    "${tempSpeed.toStringAsFixed(1)}x",
+                    style: const TextStyle(
+                      color: AppColors.white,
+                      fontSize: 32,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+
+                  const SizedBox(height: 14),
+
+                  /// SLIDER
+                  SliderTheme(
+                    data: SliderTheme.of(context).copyWith(
+                      activeTrackColor: AppColors.white,
+                      inactiveTrackColor: AppColors.white.withOpacity(.25),
+                      thumbColor: AppColors.white,
+                      overlayColor: AppColors.white.withOpacity(.15),
+                      trackHeight: 9,
+                      thumbShape: const RoundSliderThumbShape(
+                        enabledThumbRadius: 14,
+                      ),
+                    ),
+                    child: Slider(
+                      value: tempSpeed,
+                      min: 0.5,
+                      max: 2.0,
+                      divisions: 6,
+
+                      /// move only local value
+                      onChanged: (value) {
+                        setState(() => tempSpeed = value);
+                      },
+
+                      /// ⭐ PROFESSIONAL BEHAVIOR
+                      onChangeEnd: (_) {
+                        _preview(audio);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 30),
+
+            /// ACTION BUTTONS
+            Row(
+              children: [
+                /// CANCEL
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () => _cancel(audio),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppColors.white,
+                      side: const BorderSide(color: AppColors.white),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                    ),
+                    child: const Text(
+                      "Cancel",
+                      style: TextStyle(fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(width: 14),
+
+                /// SAVE
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () => _save(audio),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.white,
+                      foregroundColor: AppColors.gradientStart,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                    ),
+                    child: const Text(
+                      "Save",
+                      style: TextStyle(fontWeight: FontWeight.w800),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// --- Specialized UI Widgets for Detail Screen ---
 class Chunky3DText extends StatelessWidget {
   final String text;
   const Chunky3DText({super.key, required this.text});
@@ -268,6 +573,7 @@ class GradientTriangleButton extends StatelessWidget {
   }
 }
 
+// Custom Painter for Triangle Button
 class TrianglePainter extends CustomPainter {
   final bool isLeft;
   TrianglePainter({required this.isLeft});
@@ -282,54 +588,74 @@ class TrianglePainter extends CustomPainter {
       ).createShader(Offset.zero & size)
       ..style = PaintingStyle.fill;
 
-    const cornerRadius = 15.0;
+    const r = 18.0; // corner radius
+
     final path = Path();
 
     if (isLeft) {
-      // Rounded Left-pointing triangle
-      path.moveTo(size.width, cornerRadius);
-      path.quadraticBezierTo(size.width, 0, size.width - cornerRadius, 5);
-      path.lineTo(cornerRadius, size.height / 2 - 5);
-      path.quadraticBezierTo(
-        0,
-        size.height / 2,
-        cornerRadius,
-        size.height / 2 + 5,
-      );
-      path.lineTo(size.width - cornerRadius, size.height - 5);
+      // TOP RIGHT rounded
+      path.moveTo(size.width, r);
+      path.quadraticBezierTo(size.width, 0, size.width - r, 0);
+
+      // go to arrow tip upper
+      path.lineTo(r + 6, size.height / 2 - r);
+
+      // ⭐ ROUNDED ARROW TIP
+      path.quadraticBezierTo(0, size.height / 2, r + 6, size.height / 2 + r);
+
+      // bottom line
+      path.lineTo(size.width - r, size.height);
+
+      // BOTTOM RIGHT rounded
       path.quadraticBezierTo(
         size.width,
         size.height,
         size.width,
-        size.height - cornerRadius,
+        size.height - r,
       );
     } else {
-      // Rounded Right-pointing triangle
-      path.moveTo(0, cornerRadius);
-      path.quadraticBezierTo(0, 0, cornerRadius, 5);
-      path.lineTo(size.width - cornerRadius, size.height / 2 - 5);
+      // TOP LEFT rounded
+      path.moveTo(0, r);
+      path.quadraticBezierTo(0, 0, r, 0);
+
+      // go to arrow tip upper
+      path.lineTo(size.width - r - 6, size.height / 2 - r);
+
+      // ⭐ ROUNDED ARROW TIP
       path.quadraticBezierTo(
         size.width,
         size.height / 2,
-        size.width - cornerRadius,
-        size.height / 2 + 5,
+        size.width - r - 6,
+        size.height / 2 + r,
       );
-      path.lineTo(cornerRadius, size.height - 5);
-      path.quadraticBezierTo(0, size.height, 0, size.height - cornerRadius);
+
+      // bottom line
+      path.lineTo(r, size.height);
+
+      // BOTTOM LEFT rounded
+      path.quadraticBezierTo(0, size.height, 0, size.height - r);
     }
+
     path.close();
 
-    // Draw shadow first
-    canvas.drawShadow(path.shift(const Offset(0, 4)), AppColors.black26, 6, true);
+    // shadow
+    canvas.drawShadow(
+      path.shift(const Offset(0, 4)),
+      AppColors.black26,
+      6,
+      true,
+    );
+
+    // fill
     canvas.drawPath(path, paint);
 
-    // Draw white border for professional look
+    // border
     final borderPaint = Paint()
       ..color = AppColors.white
       ..style = PaintingStyle.stroke
       ..strokeWidth = 4
-      ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round;
+
     canvas.drawPath(path, borderPaint);
   }
 

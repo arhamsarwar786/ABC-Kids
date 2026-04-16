@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage(AppAssets.appBackground),
-            fit: BoxFit.cover,
+            fit: BoxFit.fitHeight,
           ),
         ),
         child: SafeArea(
@@ -42,10 +42,8 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               // Custom Header
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 20,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -56,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Text(
                             'Home',
                             style: GoogleFonts.fredoka(
-                              fontSize: 52,
+                              fontSize: 30,
                               fontWeight: FontWeight.w900,
                               color: AppColors.grey,
                             ),
@@ -69,10 +67,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: AppColors.grey.withOpacity(0.7),
                               ),
                               children: [
-                                const TextSpan(text: 'Welcome back to the '),
+                                const TextSpan(
+                                  text: 'Welcome back to the ',
+                                  style: TextStyle(
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
                                 TextSpan(
                                   text: 'ABC Kids',
                                   style: TextStyle(
+                                    overflow: TextOverflow.ellipsis,
                                     color: AppColors.softRed,
                                     fontWeight: FontWeight.w700,
                                   ),
@@ -90,8 +94,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         });
                       },
                       child: Container(
-                        width: 64,
-                        height: 64,
+                        width: 60,
+                        height: 60,
                         decoration: BoxDecoration(
                           color: AppColors.softRed,
                           shape: BoxShape.circle,
@@ -115,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
 
               Expanded(
                 child: SingleChildScrollView(
@@ -123,50 +127,59 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       // ABC Card
                       CategoryCard(
-                        backgroundColor: AppColors.lightBlue, // Light Blue
-                        buttonColor: AppColors.purple, // Purple
-                        title: 'Learn Words',
+                        gradientColors: const [
+                          Color(0xFFFF9A9E),
+                          Color(0xFFFECFEF),
+                        ], // Cute Pink Gradient
+                        buttonColor: Colors.white,
+                        buttonIconColor: const Color(0xFFFF9A9E),
+                        title: 'Learn Alphabets',
                         onTap: () {
                           viewModel.handleNavigation(() {
                             Navigator.pushNamed(context, AppRoutes.abc);
                           });
                         },
+
                         centerGraphic: SizedBox(
-                          width: 260,
+                          width: 280,
                           height: 200,
                           child: Stack(
+                            clipBehavior: Clip.none,
                             alignment: Alignment.center,
                             children: [
                               Positioned(
-                                left: -6,
-                                top: 22,
+                                left: 0,
+                                top: 10,
                                 child: Transform.rotate(
-                                  angle: -0.1,
+                                  angle: -0.15,
                                   child: Image.asset(
-                                    'assets/images/abc_letters/a.png',
-                                    height: 130,
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                left: 75,
-                                top: -6,
-                                child: Transform.rotate(
-                                  angle: 0.1,
-                                  child: Image.asset(
-                                    'assets/images/abc_letters/b.png',
+                                    'assets/images/home-page-characters/home-a.png',
                                     height: 120,
+                                    fit: BoxFit.contain,
                                   ),
                                 ),
                               ),
                               Positioned(
-                                right: -6,
-                                top: 24,
+                                left: 88,
+                                top: -18,
                                 child: Transform.rotate(
-                                  angle: 0.15,
+                                  angle: 0.05,
                                   child: Image.asset(
-                                    'assets/images/abc_letters/c.png',
-                                    height: 130,
+                                    'assets/images/home-page-characters/home-b.png',
+                                    height: 110,
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                right: 0,
+                                top: 15,
+                                child: Transform.rotate(
+                                  angle: 0.2,
+                                  child: Image.asset(
+                                    'assets/images/home-page-characters/home-c.png',
+                                    height: 120,
+                                    fit: BoxFit.contain,
                                   ),
                                 ),
                               ),
@@ -179,8 +192,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
                       // 123 Card
                       CategoryCard(
-                        backgroundColor: AppColors.lightBlue, // Light Blue
-                        buttonColor: AppColors.purple, // Dark Blue
+                        gradientColors: const [
+                          Color(0xFF84FAB0),
+                          Color(0xFF8FD3F4),
+                        ], // Fresh Green to Blue Gradient
+                        buttonColor: Colors.white,
+                        buttonIconColor: const Color(0xFF84FAB0),
                         title: 'Play Numbers',
                         onTap: () {
                           viewModel.handleNavigation(() {
@@ -188,32 +205,42 @@ class _HomeScreenState extends State<HomeScreen> {
                           });
                         },
                         centerGraphic: SizedBox(
-                          width: 260,
+                          width: 280,
                           height: 200,
                           child: Stack(
+                            clipBehavior: Clip.none,
                             alignment: Alignment.center,
                             children: [
                               Positioned(
-                                top: 0,
+                                top: -10,
                                 child: Image.asset(
-                                  'assets/images/123_numbers/2.png',
-                                  height: 120,
+                                  'assets/images/home-page-characters/home-2.png',
+                                  height: 110,
+                                  fit: BoxFit.contain,
                                 ),
                               ),
                               Positioned(
-                                left: 5,
-                                bottom: 40,
-                                child: Image.asset(
-                                  'assets/images/123_numbers/1.png',
-                                  height: 130,
+                                left: 10,
+                                bottom: 50,
+                                child: Transform.rotate(
+                                  angle: -0.1,
+                                  child: Image.asset(
+                                    'assets/images/home-page-characters/home-1.png',
+                                    height: 120,
+                                    fit: BoxFit.contain,
+                                  ),
                                 ),
                               ),
                               Positioned(
-                                right: 5,
-                                bottom: 45,
-                                child: Image.asset(
-                                  'assets/images/123_numbers/3.png',
-                                  height: 130,
+                                right: 10,
+                                bottom: 55,
+                                child: Transform.rotate(
+                                  angle: 0.1,
+                                  child: Image.asset(
+                                    'assets/images/home-page-characters/home-3.png',
+                                    height: 120,
+                                    fit: BoxFit.contain,
+                                  ),
                                 ),
                               ),
                             ],
@@ -239,18 +266,20 @@ class _HomeScreenState extends State<HomeScreen> {
 // --- Supporting Specialized UI Widgets ---
 
 class CategoryCard extends StatelessWidget {
-  final Color backgroundColor;
+  final List<Color> gradientColors;
   final Widget centerGraphic;
   final String title;
   final Color buttonColor;
+  final Color buttonIconColor;
   final VoidCallback onTap;
 
   const CategoryCard({
     super.key,
-    required this.backgroundColor,
+    required this.gradientColors,
     required this.centerGraphic,
     required this.title,
     required this.buttonColor,
+    required this.buttonIconColor,
     required this.onTap,
   });
 
@@ -260,34 +289,81 @@ class CategoryCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: 230,
-        margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        width: double.infinity,
+        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         decoration: BoxDecoration(
-          color: backgroundColor,
-          borderRadius: BorderRadius.circular(32),
-          boxShadow: const [
+          gradient: LinearGradient(
+            colors: gradientColors,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(36),
+          border: Border.all(color: Colors.white.withOpacity(0.4), width: 3),
+          boxShadow: [
             BoxShadow(
-              color: AppColors.black12,
-              blurRadius: 10,
-              offset: Offset(0, 5),
+              color: gradientColors.last.withOpacity(0.4),
+              blurRadius: 15,
+              offset: const Offset(0, 8),
             ),
           ],
         ),
         child: Stack(
+          clipBehavior: Clip.none,
           children: [
+            // Decorative background circles
+            Positioned(
+              right: -20,
+              top: -20,
+              child: Container(
+                width: 120,
+                height: 120,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white.withOpacity(0.15),
+                ),
+              ),
+            ),
+            Positioned(
+              left: -40,
+              bottom: -40,
+              child: Container(
+                width: 150,
+                height: 150,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white.withOpacity(0.1),
+                ),
+              ),
+            ),
+
             // Center Graphic elements overlapping beautifully
-            Align(alignment: const Alignment(0, -0.3), child: centerGraphic),
+            Align(alignment: Alignment.center, child: centerGraphic),
 
             // Bottom Left Title
             Positioned(
-              bottom: 24,
+              bottom: 15,
               left: 24,
-              child: Text(
-                title,
-                style: const TextStyle(
-                  color: AppColors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.2,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.3),
+                    width: 1,
+                  ),
+                ),
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    color: AppColors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1.2,
+                  ),
                 ),
               ),
             ),
@@ -295,25 +371,26 @@ class CategoryCard extends StatelessWidget {
             // Bottom Right Next Arrow Button
             Positioned(
               bottom: 16,
-              right: 16,
+              right: 10,
               child: Container(
-                width: 54,
-                height: 54,
+                width: 60,
+                height: 60,
                 decoration: BoxDecoration(
                   color: buttonColor,
                   shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 3),
                   boxShadow: const [
                     BoxShadow(
                       color: AppColors.black26,
-                      blurRadius: 6,
-                      offset: Offset(0, 3),
+                      blurRadius: 8,
+                      offset: Offset(0, 4),
                     ),
                   ],
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.arrow_forward_rounded,
-                  color: AppColors.white,
-                  size: 36,
+                  color: buttonIconColor,
+                  size: 40,
                 ),
               ),
             ),

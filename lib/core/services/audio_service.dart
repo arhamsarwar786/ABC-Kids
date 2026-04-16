@@ -8,8 +8,11 @@ class AudioService extends ChangeNotifier with WidgetsBindingObserver {
   final AudioPlayer _sfxPlayer = AudioPlayer();
   bool _isAppInForeground = true;
   bool _isBgmSuspended = false;
+  double _playbackRate = AppPreferences.playbackSpeed;
+  String? _currentFile;
 
   bool get isMuted => AppPreferences.isSoundMuted;
+  double get playbackRate => _playbackRate;
 
   AudioService() {
     _initPlayers();
@@ -27,6 +30,12 @@ class AudioService extends ChangeNotifier with WidgetsBindingObserver {
       if (!isMuted && !_isBgmSuspended) {
         playBackgroundMusic();
       }
+    }
+  }
+
+  void playCurrent() {
+    if (_currentFile != null) {
+      playSound(_currentFile!);
     }
   }
 
@@ -102,12 +111,21 @@ class AudioService extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   Future<void> playSound(String fullPath) async {
+    _currentFile = fullPath;
     _playSfx(fullPath);
+  }
+
+  Future<void> setPlaybackRate(double rate) async {
+    _playbackRate = rate;
+    await AppPreferences.setPlaybackSpeed(rate);
+    await _sfxPlayer.setPlaybackRate(rate);
+    notifyListeners();
   }
 
   Future<void> _playSfx(String fullPath) async {
     try {
       await _sfxPlayer.stop();
+      await _sfxPlayer.setPlaybackRate(_playbackRate);
       final relativePath = _getRelativeAssetPath(fullPath);
       await _sfxPlayer.play(AssetSource(relativePath));
     } catch (e) {
