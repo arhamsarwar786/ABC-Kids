@@ -34,30 +34,35 @@ class _DetailScreenState extends State<DetailScreen> {
     context.read<AudioService>().playSound(_currentItem.audioFileName);
   }
 
-  void _showSpeedDialog() {
-    showGeneralDialog(
-      context: context,
-      barrierDismissible: false,
-      barrierLabel: "Speed",
-      barrierColor: Colors.black.withOpacity(0.35),
-      transitionDuration: const Duration(milliseconds: 280),
-      pageBuilder: (_, __, ___) => const SizedBox(),
-      transitionBuilder: (context, animation, _, child) {
-        final curved = CurvedAnimation(
-          parent: animation,
-          curve: Curves.easeOutCubic,
-        );
+void _showSpeedDialog() {
+  showGeneralDialog(
+    context: context,
+    barrierDismissible: true,
+    barrierLabel: "Speed",
+    barrierColor: Colors.black.withOpacity(0.35),
+    transitionDuration: const Duration(milliseconds: 280),
+    pageBuilder: (_, __, ___) => const SizedBox(),
+    transitionBuilder: (context, animation, _, child) {
+      final curved = CurvedAnimation(
+        parent: animation,
+        curve: Curves.easeOutCubic,
+      );
 
-        return Transform.scale(
-          scale: Tween(begin: 0.85, end: 1.0).evaluate(curved),
-          child: Opacity(
-            opacity: animation.value,
-            child: Center(child: _SpeedPopupContent()),
-          ),
-        );
-      },
-    );
-  }
+      return Transform.scale(
+        scale: Tween(begin: 0.85, end: 1.0).evaluate(curved),
+        child: Opacity(
+          opacity: animation.value,
+          child: Center(child: _SpeedPopupContent()),
+        ),
+      );
+    },
+  ).then((_) {
+    // ensure final sync (safety layer)
+    final audio = context.read<AudioService>();
+    audio.setPlaybackRate(audio.playbackRate);
+  });
+}
+
 
   void _goToPrevious() {
     final viewModel = context.read<LearningViewModel>();
@@ -360,24 +365,26 @@ class _SpeedPopupContentState extends State<_SpeedPopupContent> {
     audio.playCurrent(); // ⚠️ see NOTE below
   }
 
-  void _save(AudioService audio) {
-    audio.setPlaybackRate(tempSpeed);
-    Navigator.pop(context);
-  }
+  // void _save(AudioService audio) {
+  //   audio.setPlaybackRate(tempSpeed);
+  //   Navigator.pop(context);
+  // }
 
-  void _cancel(AudioService audio) {
-    audio.setPlaybackRate(originalSpeed);
-    Navigator.pop(context);
-  }
+  // void _cancel(AudioService audio) {
+  //   audio.setPlaybackRate(originalSpeed);
+  //   Navigator.pop(context);
+  // }
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     final audio = context.read<AudioService>();
 
     return Material(
       color: Colors.transparent,
       child: Container(
-        width: 360,
+        width: size.width * 0.85,
+        margin: const EdgeInsets.symmetric(horizontal: 20),
         padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 28),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
@@ -387,7 +394,7 @@ class _SpeedPopupContentState extends State<_SpeedPopupContent> {
           boxShadow: [
             BoxShadow(
               color: AppColors.shadowColor.withOpacity(.35),
-              blurRadius: 40,
+              blurRadius: 20,
               offset: const Offset(0, 18),
             ),
           ],
@@ -399,13 +406,15 @@ class _SpeedPopupContentState extends State<_SpeedPopupContent> {
             Row(
               children: const [
                 Icon(Icons.speed, color: AppColors.white, size: 30),
-                SizedBox(width: 12),
-                Text(
-                  "Pronunciation Speed",
-                  style: TextStyle(
-                    color: AppColors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w800,
+                SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    "Pronunciation Speed",overflow: TextOverflow.ellipsis,
+                    style: TextStyle(overflow: TextOverflow.ellipsis,
+                      color: AppColors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ],
@@ -453,14 +462,17 @@ class _SpeedPopupContentState extends State<_SpeedPopupContent> {
                       divisions: 6,
 
                       /// move only local value
-                      onChanged: (value) {
-                        setState(() => tempSpeed = value);
-                      },
+                    onChanged: (value) {
+  setState(() => tempSpeed = value);
+},
 
-                      /// ⭐ PROFESSIONAL BEHAVIOR
-                      onChangeEnd: (_) {
-                        _preview(audio);
-                      },
+onChangeEnd: (_) async {
+  audio.setPlaybackRate(tempSpeed);
+
+  // single controlled preview
+  audio.playCurrent();
+},
+
                     ),
                   ),
                 ],
@@ -470,49 +482,49 @@ class _SpeedPopupContentState extends State<_SpeedPopupContent> {
             const SizedBox(height: 30),
 
             /// ACTION BUTTONS
-            Row(
-              children: [
-                /// CANCEL
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () => _cancel(audio),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: AppColors.white,
-                      side: const BorderSide(color: AppColors.white),
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                    ),
-                    child: const Text(
-                      "Cancel",
-                      style: TextStyle(fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                ),
+            // Row(
+            //   children: [
+            //     /// CANCEL
+            //     Expanded(
+            //       child: OutlinedButton(
+            //         onPressed: () => _cancel(audio),
+            //         style: OutlinedButton.styleFrom(
+            //           foregroundColor: AppColors.white,
+            //           side: const BorderSide(color: AppColors.white),
+            //           padding: const EdgeInsets.symmetric(vertical: 14),
+            //           shape: RoundedRectangleBorder(
+            //             borderRadius: BorderRadius.circular(18),
+            //           ),
+            //         ),
+            //         child: const Text(
+            //           "Cancel",
+            //           style: TextStyle(fontWeight: FontWeight.w700),
+            //         ),
+            //       ),
+            //     ),
 
-                const SizedBox(width: 14),
+            //     const SizedBox(width: 14),
 
-                /// SAVE
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () => _save(audio),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.white,
-                      foregroundColor: AppColors.gradientStart,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                    ),
-                    child: const Text(
-                      "Save",
-                      style: TextStyle(fontWeight: FontWeight.w800),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            //     /// SAVE
+            //     Expanded(
+            //       child: ElevatedButton(
+            //         onPressed: () => _save(audio),
+            //         style: ElevatedButton.styleFrom(
+            //           backgroundColor: AppColors.white,
+            //           foregroundColor: AppColors.gradientStart,
+            //           padding: const EdgeInsets.symmetric(vertical: 14),
+            //           shape: RoundedRectangleBorder(
+            //             borderRadius: BorderRadius.circular(18),
+            //           ),
+            //         ),
+            //         child: const Text(
+            //           "Save",
+            //           style: TextStyle(fontWeight: FontWeight.w800),
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
           ],
         ),
       ),

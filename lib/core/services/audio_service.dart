@@ -115,23 +115,32 @@ class AudioService extends ChangeNotifier with WidgetsBindingObserver {
     _playSfx(fullPath);
   }
 
-  Future<void> setPlaybackRate(double rate) async {
-    _playbackRate = rate;
-    await AppPreferences.setPlaybackSpeed(rate);
-    await _sfxPlayer.setPlaybackRate(rate);
-    notifyListeners();
-  }
+Future<void> setPlaybackRate(double rate) async {
+  _playbackRate = rate;
+  await AppPreferences.setPlaybackSpeed(rate);
 
-  Future<void> _playSfx(String fullPath) async {
-    try {
-      await _sfxPlayer.stop();
-      await _sfxPlayer.setPlaybackRate(_playbackRate);
-      final relativePath = _getRelativeAssetPath(fullPath);
-      await _sfxPlayer.play(AssetSource(relativePath));
-    } catch (e) {
-      debugPrint('Audio missing: $fullPath');
-    }
+  // 🔥 CRITICAL: immediately apply to active player
+  await _sfxPlayer.setPlaybackRate(rate);
+
+  notifyListeners();
+}
+
+
+Future<void> _playSfx(String fullPath) async {
+  try {
+    await _sfxPlayer.stop();
+
+    final relativePath = _getRelativeAssetPath(fullPath);
+
+    await _sfxPlayer.play(AssetSource(relativePath));
+
+    // ⚠️ IMPORTANT: apply AFTER playback starts
+    await _sfxPlayer.setPlaybackRate(_playbackRate);
+  } catch (e) {
+    debugPrint('Audio missing: $fullPath');
   }
+}
+
 
   @override
   void dispose() {
