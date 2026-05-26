@@ -54,7 +54,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         children: [
           // 1. Persistent Professional Background
           Positioned.fill(
-            child: Image.asset(AppAssets.onboardBackground, fit: BoxFit.cover),
+            child: Image.asset(AppAssets.onboardBackground, 
+            fit: BoxFit.cover
+            ),
           ),
 
           // 2. Main Page Content (Sliding Part)

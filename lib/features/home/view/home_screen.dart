@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage(AppAssets.appBackground),
-            fit: BoxFit.fitHeight,
+            fit: BoxFit.cover,
           ),
         ),
         child: SafeArea(
