@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../app/routes/app_routes.dart';
-import '../../../app/theme/app_theme.dart';
-import '../../../core/services/audio_service.dart';
+import '../../../core/services/ads_service.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/utils/app_colors.dart';
+import '../../shared/widgets/banner_ad_widget.dart';
 import '../../shared/widgets/letter_tile.dart';
 import '../viewmodel/learning_viewmodel.dart';
 
@@ -17,6 +17,15 @@ class CountingScreen extends StatefulWidget {
 }
 
 class _CountingScreenState extends State<CountingScreen> {
+  bool _isLeaving = false;
+
+  Future<void> _leave() async {
+    if (_isLeaving) return;
+    _isLeaving = true;
+    await context.read<AdsService>().showInterstitialAtSessionEnd();
+    if (mounted) Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     final numbers = context.read<LearningViewModel>().numbers;
@@ -29,9 +38,16 @@ class _CountingScreenState extends State<CountingScreen> {
       const Color(0xFFF06292), // Pink
     ];
 
-    return Scaffold(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop) return;
+        _leave();
+      },
+      child: Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: AppColors.transparent,
+      bottomNavigationBar: const AppBannerAd(),
       appBar: AppBar(
         title: Text(
           'The Numbers',
@@ -48,7 +64,7 @@ class _CountingScreenState extends State<CountingScreen> {
           padding: const EdgeInsets.only(left: 12),
           child: Center(
             child: GestureDetector(
-              onTap: () => Navigator.pop(context),
+              onTap: _leave,
               child: Container(
                 width: 44,
                 height: 44,
@@ -109,6 +125,7 @@ class _CountingScreenState extends State<CountingScreen> {
           ),
         ),
       ),
+    ),
     );
   }
 }

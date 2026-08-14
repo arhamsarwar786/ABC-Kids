@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../app/routes/app_routes.dart';
+import '../../../core/services/ads_service.dart';
 import '../../../core/services/audio_service.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/utils/app_colors.dart';
+import '../../shared/widgets/banner_ad_widget.dart';
+import '../../shared/widgets/native_ad_widget.dart';
 import '../viewmodel/home_viewmodel.dart';
-import 'dart:math' as math;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<AudioService>().playBackgroundMusic();
+      context.read<AdsService>().markHomeReached();
     });
   }
 
@@ -30,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.transparent,
+      bottomNavigationBar: const AppBannerAd(),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -87,6 +91,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
+                    const _StarRewardButton(),
+                    const SizedBox(width: 10),
                     GestureDetector(
                       onTap: () {
                         viewModel.handleNavigation(() {
@@ -188,7 +194,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
 
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 8),
+                      const AppNativeAd(),
+                      const SizedBox(height: 8),
 
                       // 123 Card
                       CategoryCard(
@@ -248,15 +256,57 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
 
-                      const SizedBox(
-                        height: 48,
-                      ), // Padding at bottom for scroll safety
+                      const SizedBox(height: 16),
                     ],
                   ),
                 ),
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _StarRewardButton extends StatelessWidget {
+  const _StarRewardButton();
+
+  @override
+  Widget build(BuildContext context) {
+    final stars = context.watch<AdsService>().starCount;
+
+    return GestureDetector(
+      onTap: () => context.read<AdsService>().offerRewardedAd(context),
+      child: Container(
+        height: 60,
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        decoration: BoxDecoration(
+          color: const Color(0xFFFFB74D),
+          borderRadius: BorderRadius.circular(30),
+          border: Border.all(color: AppColors.white, width: 4),
+          boxShadow: const [
+            BoxShadow(
+              color: AppColors.black26,
+              blurRadius: 4,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.star_rounded, color: AppColors.white, size: 28),
+            const SizedBox(width: 4),
+            Text(
+              '$stars',
+              style: GoogleFonts.fredoka(
+                color: AppColors.white,
+                fontWeight: FontWeight.w800,
+                fontSize: 20,
+              ),
+            ),
+          ],
         ),
       ),
     );

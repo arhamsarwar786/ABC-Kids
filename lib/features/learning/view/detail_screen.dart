@@ -3,9 +3,11 @@ import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../model/learning_item.dart';
 import '../viewmodel/learning_viewmodel.dart';
-import '../../../core/services/audio_service.dart';
 import '../../../core/constants/app_assets.dart';
+import '../../../core/services/ads_service.dart';
+import '../../../core/services/audio_service.dart';
 import '../../../core/utils/app_colors.dart';
+import '../../shared/widgets/banner_ad_widget.dart';
 
 class DetailScreen extends StatefulWidget {
   final LearningItem item;
@@ -18,6 +20,7 @@ class DetailScreen extends StatefulWidget {
 class _DetailScreenState extends State<DetailScreen> {
   late LearningItem _currentItem;
   late AudioService _audioService;
+  bool _isAdvancing = false;
 
   @override
   void initState() {
@@ -27,6 +30,7 @@ class _DetailScreenState extends State<DetailScreen> {
     _playSound();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _audioService.setBgmSuspended(true);
+      context.read<AdsService>().recordLearningView();
     });
   }
 
@@ -79,7 +83,8 @@ void _showSpeedDialog() {
     }
   }
 
-  void _goToNext() {
+  Future<void> _goToNext() async {
+    if (_isAdvancing) return;
     final viewModel = context.read<LearningViewModel>();
     List<LearningItem> list = _isAlphabet()
         ? viewModel.alphabets
@@ -87,10 +92,18 @@ void _showSpeedDialog() {
     int index = list.indexWhere((item) => item.label == _currentItem.label);
 
     if (index < list.length - 1) {
+      _isAdvancing = true;
+      final ads = context.read<AdsService>();
+      ads.recordLetterCompleted();
+      if (ads.shouldOfferRewardedInterstitial) {
+        await ads.offerRewardedInterstitial(context);
+      }
+      if (!mounted) return;
       setState(() {
         _currentItem = list[index + 1];
       });
       _playSound();
+      _isAdvancing = false;
     }
   }
 
@@ -115,6 +128,7 @@ void _showSpeedDialog() {
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: AppColors.transparent,
+      bottomNavigationBar: const AppBannerAd(),
       appBar: AppBar(
         title: Text(
           "Let's Learn",
@@ -279,7 +293,7 @@ void _showSpeedDialog() {
               // 3. Navigation Control Center (Bottom)
               Padding(
                 padding: const EdgeInsets.only(
-                  bottom: 150,
+                  bottom: 24,
                   left: 30,
                   right: 30,
                 ),
