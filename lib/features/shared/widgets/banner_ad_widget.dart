@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../../core/constants/ad_constants.dart';
-import '../../../core/utils/app_colors.dart';
+import '../../../core/services/ads_service.dart';
 
 /// Anchored adaptive banner for the bottom of a [Scaffold].
 class AppBannerAd extends StatefulWidget {
@@ -39,7 +39,7 @@ class _AppBannerAdState extends State<AppBannerAd> {
     final bannerAd = BannerAd(
       size: size,
       adUnitId: AdConstants.bannerAdUnitId,
-      request: const AdRequest(),
+      request: AdsService.childRequest,
       listener: BannerAdListener(
         onAdLoaded: (ad) {
           if (!mounted) {
@@ -81,15 +81,13 @@ class _AppBannerAdState extends State<AppBannerAd> {
     }
 
     return ColoredBox(
-      color: AppColors.white,
+      color: Colors.white,
       child: SafeArea(
         top: false,
         child: SizedBox(
           width: adSize.width.toDouble(),
           height: adSize.height.toDouble(),
-          child: _isLoaded && _bannerAd != null
-              ? AdWidget(ad: _bannerAd!)
-              : const SizedBox.shrink(),
+          child: _isLoaded && _bannerAd != null ? AdWidget(ad: _bannerAd!) : const SizedBox.shrink(),
         ),
       ),
     );

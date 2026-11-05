@@ -37,6 +37,7 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        manifestPlaceholders["appLabel"] = "ABC Kids"
     }
 
     signingConfigs {
@@ -52,6 +53,19 @@ android {
     }
 
     buildTypes {
+        debug {
+            // Debug builds install next to the Play Store app instead of
+            // conflicting with its signature. Release id is unchanged.
+            applicationIdSuffix = ".dev"
+            manifestPlaceholders["appLabel"] = "ABC Kids (dev)"
+        }
+        // Profile builds (created by the Flutter plugin) get the same suffix.
+        configureEach {
+            if (name == "profile") {
+                applicationIdSuffix = ".dev"
+                manifestPlaceholders["appLabel"] = "ABC Kids (dev)"
+            }
+        }
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.

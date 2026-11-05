@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../../core/constants/ad_constants.dart';
-import '../../../core/utils/app_colors.dart';
+import '../../../core/services/ads_service.dart';
+import '../../../core/design/tokens.dart';
 
 /// Small native template, clearly labeled as an ad.
 class AppNativeAd extends StatefulWidget {
@@ -25,7 +25,7 @@ class _AppNativeAdState extends State<AppNativeAd> {
   void _loadAd() {
     final nativeAd = NativeAd(
       adUnitId: AdConstants.nativeAdUnitId,
-      request: const AdRequest(),
+      request: AdsService.childRequest,
       listener: NativeAdListener(
         onAdLoaded: (ad) {
           if (!mounted) {
@@ -44,21 +44,21 @@ class _AppNativeAdState extends State<AppNativeAd> {
       ),
       nativeTemplateStyle: NativeTemplateStyle(
         templateType: TemplateType.small,
-        mainBackgroundColor: AppColors.white,
+        mainBackgroundColor: Colors.white,
         cornerRadius: 16,
         callToActionTextStyle: NativeTemplateTextStyle(
-          textColor: AppColors.white,
-          backgroundColor: AppColors.gradientStart,
+          textColor: Colors.white,
+          backgroundColor: AppTokens.purple,
           style: NativeTemplateFontStyle.bold,
           size: 14,
         ),
         primaryTextStyle: NativeTemplateTextStyle(
-          textColor: AppColors.grey,
+          textColor: AppTokens.navy,
           style: NativeTemplateFontStyle.bold,
           size: 14,
         ),
         secondaryTextStyle: NativeTemplateTextStyle(
-          textColor: AppColors.grey,
+          textColor: AppTokens.navy,
           style: NativeTemplateFontStyle.normal,
           size: 12,
         ),
@@ -88,10 +88,10 @@ class _AppNativeAdState extends State<AppNativeAd> {
             padding: const EdgeInsets.only(left: 8, bottom: 6),
             child: Text(
               'Ad',
-              style: GoogleFonts.fredoka(
+              style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
-                color: AppColors.grey,
+                color: AppTokens.navy,
               ),
             ),
           ),

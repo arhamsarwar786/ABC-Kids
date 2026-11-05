@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.1+10
+version: 1.1.0+12
 
 environment:
   sdk: ^3.10.0
@@ -38,9 +38,10 @@ dependencies:
   audioplayers: ^6.6.0
   shared_preferences: ^2.5.5
   share_plus: ^12.0.2
-  google_fonts: ^8.0.2
+  flutter_tts: ^4.2.0
   flutter_svg: ^2.2.4
   google_mobile_ads: ^9.1.0
+  phosphor_flutter: ^2.1.0
 
 dev_dependencies:
   flutter_test:
@@ -52,6 +53,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
+  shared_preferences_platform_interface: ^2.4.1
   flutter_launcher_icons: ^0.14.4
 
 flutter_launcher_icons:
@@ -86,13 +88,41 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/
-    - assets/images/abc_letters/
-    - assets/images/123_numbers/
     - "assets/audio/background sound/"
     - assets/audio/abc_letter_sound/
     - assets/audio/0-to-10_counting/
-    - assets/images/home-page-characters/
+    - assets/audio/effects/
+    # Reviewed phoneme / word recordings go here; see docs/redesign/ASSET_INVENTORY.md
+    - assets/audio/phonemes/
+    - assets/audio/words/
+
+  fonts:
+    # Headings: Baloo 2. Body: Nunito. Big teaching letters: Fredoka.
+    # All SIL OFL 1.1 (licences in assets/fonts/), subset to Latin.
+    - family: Baloo2
+      fonts:
+        - asset: assets/fonts/Baloo2-600.ttf
+          weight: 600
+        - asset: assets/fonts/Baloo2-700.ttf
+          weight: 700
+        - asset: assets/fonts/Baloo2-800.ttf
+          weight: 800
+    - family: Nunito
+      fonts:
+        - asset: assets/fonts/Nunito-500.ttf
+          weight: 500
+        - asset: assets/fonts/Nunito-600.ttf
+          weight: 600
+        - asset: assets/fonts/Nunito-700.ttf
+          weight: 700
+        - asset: assets/fonts/Nunito-800.ttf
+          weight: 800
+    - family: Fredoka
+      fonts:
+        - asset: assets/fonts/Fredoka-600.ttf
+          weight: 600
+        - asset: assets/fonts/Fredoka-700.ttf
+          weight: 700
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -1,28 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+
+import '../features/shell/main_shell.dart';
+import '../features/welcome/welcome_screen.dart';
+import '../state/settings_store.dart';
 import 'theme/app_theme.dart';
-import 'routes/app_routes.dart';
-import '../core/utils/app_colors.dart';
 
 class AbcKidsApp extends StatelessWidget {
   const AbcKidsApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsStore>().settings;
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
-        systemNavigationBarColor: AppColors.transparent,
-        systemNavigationBarDividerColor: AppColors.transparent,
-        systemNavigationBarIconBrightness: Brightness.dark,
-        statusBarColor: AppColors.transparent,
+        statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.dark,
+        systemNavigationBarColor: Colors.transparent,
+        systemNavigationBarIconBrightness: Brightness.dark,
       ),
       child: MaterialApp(
-        title: 'ABC Kids Learning',
+        title: 'ABC Kids',
         debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme,
-        initialRoute: AppRoutes.splash,
-        onGenerateRoute: AppRoutes.generateRoute,
+        theme: AppTheme.light,
+        builder: (context, child) {
+          final mq = MediaQuery.of(context);
+          // Respect system text size; "larger text" adds 20% on top, capped.
+          final scaler = settings.largerText
+              ? TextScaler.linear((mq.textScaler.scale(1) * 1.2).clamp(1.0, 2.2))
+              : mq.textScaler.clamp(maxScaleFactor: 2.0);
+          return MediaQuery(
+            data: mq.copyWith(textScaler: scaler, disableAnimations: mq.disableAnimations || settings.reduceMotion),
+            child: child!,
+          );
+        },
+        home: settings.firstRunComplete ? const MainShell() : const WelcomeScreen(),
       ),
     );
   }

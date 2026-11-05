@@ -44,7 +44,9 @@ class AdConstants {
     required String androidTest,
     required String iosTest,
   }) {
-    if (kDebugMode) {
+    // Test ads in debug and profile builds; production IDs only in release,
+    // so device testing never generates invalid traffic.
+    if (!kReleaseMode) {
       return defaultTargetPlatform == TargetPlatform.iOS
           ? iosTest
           : androidTest;

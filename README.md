@@ -1,17 +1,30 @@
-# abc_kids_learning
+# ABC Kids (abc_kids_learning)
 
-A new Flutter project.
+Offline Flutter app for early phonics, letters, numbers and shapes. Children play
+guided sound lessons (s a t p i n m), six letter/sound games, number and shape
+activities, and collect stickers. Grown-ups manage local learner profiles,
+preferences and progress behind a parent gate. No accounts, microphone or network
+are needed to play.
 
-## Getting Started
+## Quick start
 
-This project is a starting point for a Flutter application.
+```bash
+flutter pub get
+flutter analyze
+flutter test
+flutter run
+```
 
-A few resources to get you started if this is your first Flutter project:
+## Documentation
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+- [docs/redesign/PROGRESS.md](docs/redesign/PROGRESS.md): checklist and resume point
+- [docs/redesign/GAP_ANALYSIS.md](docs/redesign/GAP_ANALYSIS.md): requirements vs status
+- [docs/redesign/FLOW_MAP.md](docs/redesign/FLOW_MAP.md): screens and navigation
+- [docs/redesign/ARCHITECTURE.md](docs/redesign/ARCHITECTURE.md): engine, evidence, audio, storage
+- [docs/redesign/ASSET_INVENTORY.md](docs/redesign/ASSET_INVENTORY.md): assets and their review status
+- [docs/redesign/RELEASE_BLOCKERS.md](docs/redesign/RELEASE_BLOCKERS.md): what must happen before release
+- [docs/redesign/MONETIZATION.md](docs/redesign/MONETIZATION.md): retained ad integration and placement changes
+- [docs/redesign/BUILD_RUN.md](docs/redesign/BUILD_RUN.md): prerequisites, commands, test results
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+**Important:** the bundled letter recordings are not reviewed phonics. See the
+release blockers before shipping.

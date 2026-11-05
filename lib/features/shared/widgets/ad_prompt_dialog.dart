@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import '../../../core/utils/app_colors.dart';
+import '../../../core/design/tokens.dart';
+import '../../../core/design/app_icons.dart';
 
 class AdPromptDialog {
   static Future<bool?> show(
@@ -21,19 +21,19 @@ class AdPromptDialog {
           title: Text(
             title,
             textAlign: TextAlign.center,
-            style: GoogleFonts.fredoka(
+            style: TextStyle(
               fontWeight: FontWeight.w800,
               fontSize: 24,
-              color: AppColors.grey,
+              color: AppTokens.navy,
             ),
           ),
           content: Text(
             message,
             textAlign: TextAlign.center,
-            style: GoogleFonts.fredoka(
+            style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,
-              color: AppColors.grey,
+              color: AppTokens.navy,
             ),
           ),
           actionsAlignment: MainAxisAlignment.center,
@@ -42,10 +42,10 @@ class AdPromptDialog {
               onPressed: () => Navigator.pop(ctx, false),
               child: Text(
                 skipLabel,
-                style: GoogleFonts.fredoka(
+                style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
-                  color: AppColors.grey,
+                  color: AppTokens.navy,
                 ),
               ),
             ),
@@ -70,18 +70,18 @@ class AdPromptDialog {
           title: Text(
             'Try again soon',
             textAlign: TextAlign.center,
-            style: GoogleFonts.fredoka(
+            style: TextStyle(
               fontWeight: FontWeight.w800,
               fontSize: 22,
-              color: AppColors.grey,
+              color: AppTokens.navy,
             ),
           ),
           content: Text(
             'A video is not ready right now. Keep learning and try again later!',
             textAlign: TextAlign.center,
-            style: GoogleFonts.fredoka(
+            style: TextStyle(
               fontSize: 16,
-              color: AppColors.grey,
+              color: AppTokens.navy,
             ),
           ),
           actionsAlignment: MainAxisAlignment.center,
@@ -107,23 +107,23 @@ class AdPromptDialog {
           title: Text(
             'You earned a star!',
             textAlign: TextAlign.center,
-            style: GoogleFonts.fredoka(
+            style: TextStyle(
               fontWeight: FontWeight.w800,
               fontSize: 22,
-              color: AppColors.grey,
+              color: AppTokens.navy,
             ),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.star_rounded, color: Color(0xFFFFB74D), size: 64),
+              const Icon(AppIcons.star, color: Color(0xFFFFB74D), size: 64),
               const SizedBox(height: 12),
               Text(
                 'You now have $totalStars ${totalStars == 1 ? 'star' : 'stars'}!',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.fredoka(
+                style: TextStyle(
                   fontSize: 16,
-                  color: AppColors.grey,
+                  color: AppTokens.navy,
                 ),
               ),
             ],

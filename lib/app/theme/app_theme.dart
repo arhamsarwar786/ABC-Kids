@@ -1,78 +1,101 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
-import '../../core/utils/app_colors.dart';
+
+import '../../core/design/tokens.dart';
 
 class AppTheme {
-  static const Color primaryColor = AppColors.primary;
-  static const Color secondaryColor = AppColors.secondary;
-  static const Color backgroundColor = AppColors.background;
-  static const Color cardColor = AppColors.card;
-  static const Color textColor = AppColors.text;
-  static const Color accentPink = AppColors.pink;
-  static const Color accentGreen = AppColors.green;
+  /// Body and UI text.
+  static const String fontFamily = 'Nunito';
 
-  static ThemeData get lightTheme {
+  /// Headings and button labels: rounded and friendly.
+  static const String displayFamily = 'Baloo2';
+
+  /// The big letters children learn (simple, round letter shapes).
+  static const String letterFamily = 'Fredoka';
+
+  static ThemeData get light {
+    final scheme = ColorScheme.fromSeed(
+      seedColor: AppTokens.purple,
+      primary: AppTokens.purple,
+      surface: AppTokens.ivory,
+      onSurface: AppTokens.navy,
+    );
+    const t = TextStyle(color: AppTokens.navy, fontFamily: fontFamily);
+    const h = TextStyle(color: AppTokens.navy, fontFamily: displayFamily);
     return ThemeData(
-      primaryColor: primaryColor,
-      scaffoldBackgroundColor: backgroundColor,
-      // Apply Fredoka globally as the font family
-      fontFamily: GoogleFonts.fredoka().fontFamily,
+      useMaterial3: true,
+      colorScheme: scheme,
+      scaffoldBackgroundColor: AppTokens.ivory,
+      fontFamily: fontFamily,
+      textTheme: TextTheme(
+        displaySmall: h.copyWith(fontSize: 38, fontWeight: FontWeight.w800, height: 1.1, letterSpacing: -0.3),
+        headlineMedium: h.copyWith(fontSize: 30, fontWeight: FontWeight.w800, height: 1.1),
+        headlineSmall: h.copyWith(fontSize: 26, fontWeight: FontWeight.w800, height: 1.15),
+        titleLarge: h.copyWith(fontSize: 22, fontWeight: FontWeight.w700, height: 1.2),
+        titleMedium: t.copyWith(fontSize: 18, fontWeight: FontWeight.w700),
+        bodyLarge: t.copyWith(fontSize: 18, fontWeight: FontWeight.w600, height: 1.4),
+        bodyMedium: t.copyWith(fontSize: 16, fontWeight: FontWeight.w600, height: 1.4),
+        labelLarge: h.copyWith(fontSize: 19, fontWeight: FontWeight.w700, height: 1.15),
+      ),
       appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.transparent,
+        backgroundColor: AppTokens.ivory,
+        foregroundColor: AppTokens.navy,
         elevation: 0,
-        centerTitle: true,
-        iconTheme: IconThemeData(color: textColor),
-        titleTextStyle: TextStyle(
-          color: textColor,
-          fontSize: 26,
-          fontWeight: FontWeight.w800,
-        ),
+        scrolledUnderElevation: 0,
+        centerTitle: false,
+        titleTextStyle: TextStyle(fontFamily: displayFamily, color: AppTokens.navy, fontSize: 24, fontWeight: FontWeight.w800),
         systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: AppColors.transparent,
+          statusBarColor: Colors.transparent,
           statusBarIconBrightness: Brightness.dark,
-          systemNavigationBarColor: AppColors.transparent,
+          systemNavigationBarColor: Colors.transparent,
           systemNavigationBarIconBrightness: Brightness.dark,
-          systemNavigationBarDividerColor: AppColors.transparent,
         ),
       ),
       cardTheme: CardThemeData(
-        color: cardColor,
-        elevation: 6,
-        shadowColor: AppColors.black26,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-      ),
-      textTheme: GoogleFonts.fredokaTextTheme(
-        const TextTheme(
-          displayLarge: TextStyle(
-            color: textColor,
-            fontSize: 36,
-            fontWeight: FontWeight.bold,
-          ),
-          titleLarge: TextStyle(
-            color: textColor,
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
-          ),
-          bodyLarge: TextStyle(
-            color: textColor,
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
-          ),
+        color: AppTokens.surface,
+        elevation: 0,
+        margin: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppTokens.radius),
+          side: const BorderSide(color: AppTokens.outline),
         ),
       ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: secondaryColor,
-          foregroundColor: AppColors.white,
-          elevation: 4,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-          textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
+      chipTheme: ChipThemeData(
+        shape: const StadiumBorder(side: BorderSide(color: AppTokens.outline, width: 1.5)),
+        labelStyle: t.copyWith(fontSize: 16, fontWeight: FontWeight.w700),
+        backgroundColor: AppTokens.surface,
+        selectedColor: AppTokens.purpleSoft,
+        checkmarkColor: AppTokens.purple,
       ),
+      listTileTheme: ListTileThemeData(
+        titleTextStyle: t.copyWith(fontSize: 17, fontWeight: FontWeight.w700),
+        subtitleTextStyle: t.copyWith(fontSize: 15, fontWeight: FontWeight.w500, color: AppTokens.navyMuted),
+        iconColor: AppTokens.purple,
+      ),
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith((s) => s.contains(WidgetState.selected) ? AppTokens.purple : null),
+      ),
+      sliderTheme: const SliderThemeData(activeTrackColor: AppTokens.purple, thumbColor: AppTokens.purple),
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: AppTokens.surface,
+        surfaceTintColor: Colors.transparent,
+        indicatorColor: AppTokens.purpleSoft,
+        height: 74,
+        labelTextStyle: WidgetStateProperty.resolveWith((s) => TextStyle(
+              fontFamily: displayFamily,
+              fontSize: 15,
+              fontWeight: FontWeight.w800,
+              color: s.contains(WidgetState.selected) ? AppTokens.purple : AppTokens.navyMuted,
+            )),
+        iconTheme: WidgetStateProperty.resolveWith((s) => IconThemeData(
+              size: 28,
+              color: s.contains(WidgetState.selected) ? AppTokens.purple : AppTokens.navyMuted,
+            )),
+      ),
+      pageTransitionsTheme: const PageTransitionsTheme(builders: {
+        TargetPlatform.android: FadeForwardsPageTransitionsBuilder(),
+        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+      }),
     );
   }
 }
