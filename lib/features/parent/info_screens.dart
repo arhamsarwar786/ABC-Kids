@@ -69,8 +69,8 @@ class PrivacyScreen extends StatelessWidget {
       const SectionTitle('Device voice'),
       p('If “Device voice for words” is on, words and instructions are read by your device’s text-to-speech engine. Depending on your device and its settings, that engine may be provided by another company.'),
       const SectionTitle('Advertising'),
-      p('This app includes the Google Mobile Ads software. In this version, no ads are shown while children play. '
-          'The ads software is only started when a grown-up opens the parent area${ads.policy.parentAreaBanner ? ', where a banner ad may appear' : ''}. '
+      p('This app includes the Google Mobile Ads software. ${ads.policy.childBanners ? 'A small banner ad, clearly labelled “Advertisement”, appears in its own strip at the bottom of the screen. ' : 'No ads are shown in this version. '}'
+          'No full-screen, pop-up or video ads are used. '
           'Ad requests are marked for child-directed treatment and limited to G-rated content. When started, the ads software may collect device information as described in Google’s policies.'),
       p('The grown-up check protects settings from young children. It is not a way of giving parental consent.'),
       const SectionTitle('Deleting data'),

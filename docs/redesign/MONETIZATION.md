@@ -23,8 +23,7 @@ before release.
 | Interstitial when leaving ABC/Numbers | Off | `sessionEndInterstitial: false` |
 | App-open ad on return to foreground | Off | `appOpenOnForeground: false` |
 | “Earn a star” rewarded ad (star button on Home) and rewarded interstitial every 5 letters | Off; earlier stars migrated to “stars from before” | `rewardedPrompts: false` |
-| — | Banner at the bottom of the **parent dashboard** | `parentAreaBanner: true` |
-| Banner on Home, ABC, Numbers, Detail | **One** standard 320×50 banner on the four browse tabs (Home, ABC, Games, Stickers), Android only; labelled “Advertisement”, in its own card, 14 dp above the tab bar. Never in lessons, games, rewards or the letter book (those are full-screen routes above the shell) | `childBanners` via `AdPlacementPolicy.forPlatform()` |
+| Banner on Home, ABC, Numbers, Detail | **Exactly one** banner per screen, Android only, labelled “Advertisement”, never drawn over content: on the four tab screens (Home, ABC, Games, Stickers) it is docked directly above the tab bar; on every other screen (lessons, games, hubs, parent area, welcome) it is a single strip below the content. No inline banners inside scrolling content (Families policy: no multiple ad placements on a page) | `childBanners` via `AdPlacementPolicy.forPlatform()` |
 
 The Mobile Ads SDK starts when the browse tabs first appear (banner only, so no
 ad covers the screen at launch). Every request is non-personalised

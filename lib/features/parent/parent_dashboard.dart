@@ -4,14 +4,12 @@ import 'package:provider/provider.dart';
 import '../../core/design/components/scaffolds.dart';
 import '../../core/design/components/settings_tiles.dart';
 import '../../core/design/tokens.dart';
-import '../../core/services/ads_service.dart';
 import '../../data/content/content_catalog.dart';
 import '../../data/models/content.dart';
 import '../../data/models/learner.dart';
 import '../../data/models/progress.dart';
 import '../../state/learner_store.dart';
 import '../../state/progress_store.dart';
-import '../shared/widgets/banner_ad_widget.dart';
 import 'device_settings_screen.dart';
 import 'info_screens.dart';
 import 'learners_screen.dart';
@@ -28,20 +26,12 @@ class ParentDashboard extends StatefulWidget {
 }
 
 class _ParentDashboardState extends State<ParentDashboard> {
-  @override
-  void initState() {
-    super.initState();
-    final ads = context.read<AdsService>();
-    if (ads.policy.parentAreaBanner) ads.ensureStarted();
-  }
-
   void _push(Widget w) => Navigator.of(context).push(MaterialPageRoute(builder: (_) => w));
 
   @override
   Widget build(BuildContext context) {
     final learner = context.watch<LearnerStore>().active;
     final progress = context.watch<ProgressStore>();
-    final ads = context.watch<AdsService>();
     final t = Theme.of(context).textTheme;
     final seq = learner.preferences.soundSequence;
     final explored = seq.where((l) => progress.pathStatus(l) != PathStatus.newSound).toList();
@@ -56,7 +46,6 @@ class _ParentDashboardState extends State<ParentDashboard> {
 
     return ParentScaffold(
       title: 'Parent area',
-      bottom: ads.policy.parentAreaBanner && ads.ready ? const AppBannerAd() : null,
       children: [
         Card(
           child: Padding(

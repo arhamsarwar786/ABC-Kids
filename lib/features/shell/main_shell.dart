@@ -6,11 +6,10 @@ import '../../core/audio/audio_coordinator.dart';
 import '../../core/design/app_icons.dart';
 import '../../core/design/components/motion.dart';
 import '../../core/design/tokens.dart';
-import '../../core/services/ads_service.dart';
 import '../alphabet/alphabet_screen.dart';
 import '../games/games_catalogue.dart';
 import '../home/home_tab.dart';
-import '../shared/widgets/kid_safe_banner.dart';
+import '../shared/widgets/ad_slot.dart';
 import '../stickers/stickers_tab.dart';
 
 enum ShellTab { home, abc, games, stickers }
@@ -28,6 +27,24 @@ class MainShell extends StatefulWidget {
 
 class _MainShellState extends State<MainShell> {
   int _index = 0;
+  AdRouteTracker? _tracker;
+  Route<dynamic>? _route;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Lets the app-wide bottom strip step aside while this shell (which docks
+    // its own banner above the tab bar) is the screen on top.
+    _tracker = Provider.of<AdRouteTracker?>(context, listen: false);
+    _route = ModalRoute.of(context);
+    if (_route != null) _tracker?.registerShell(_route);
+  }
+
+  @override
+  void dispose() {
+    if (_route != null) _tracker?.unregisterShell(_route!);
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -35,10 +52,6 @@ class _MainShellState extends State<MainShell> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       context.read<AudioCoordinator>().enableMusic();
-      // Banner only (no full-screen ads), so starting here is not an
-      // “ad on launch”: nothing covers the screen.
-      final ads = context.read<AdsService>();
-      if (ads.policy.childBanners) ads.ensureStarted();
     });
   }
 
@@ -56,8 +69,9 @@ class _MainShellState extends State<MainShell> {
         index: _index,
         children: const [HomeTab(), AlphabetScreen(asTab: true), GamesCatalogue(), StickersTab()],
       ),
+      // Banner docked directly above the tab bar, which stays at the very bottom.
       bottomNavigationBar: Column(mainAxisSize: MainAxisSize.min, children: [
-        const KidSafeBanner(),
+        const BannerSlot(style: BannerStyle.strip),
         KidTabBar(index: _index, onSelect: _select),
       ]),
     );
