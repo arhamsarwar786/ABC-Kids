@@ -40,13 +40,24 @@ void main() {
     }
   });
 
-  test('no ad widget inside lessons, games or rewards', () {
-    for (final dir in ['lib/features/lesson', 'lib/features/games', 'lib/features/alphabet', 'lib/features/numbers', 'lib/features/shapes']) {
+  test('no inline ad widget inside lessons or gameplay (only the docked strip below them)', () {
+    // Inline banners live in browse/scroll screens only. Lessons and the game
+    // screens themselves never contain one; the app-wide strip sits outside them.
+    for (final dir in ['lib/features/lesson', 'lib/features/games']) {
       for (final f in Directory(dir).listSync(recursive: true).whereType<File>()) {
+        if (f.path.endsWith('games_catalogue.dart')) continue; // the Games tab list
         final s = f.readAsStringSync();
-        expect(RegExp(r'KidSafeBanner|AppBannerAd|NativeAdWidget|AdWidget').hasMatch(s), isFalse, reason: f.path);
+        expect(RegExp(r'BannerSlot|KidSafeBanner|AppBannerAd|NativeAdWidget|AdWidget').hasMatch(s), isFalse, reason: f.path);
       }
     }
+  });
+
+  test('one banner per page: BannerSlot is used only by the app-wide strip and the tab shell dock', () {
+    final users = [
+      for (final f in Directory('lib').listSync(recursive: true).whereType<File>().where((f) => f.path.endsWith('.dart')))
+        if (RegExp(r'\bBannerSlot\(').hasMatch(f.readAsStringSync())) f.path,
+    ]..sort();
+    expect(users, ['lib/features/shared/widgets/ad_slot.dart', 'lib/features/shared/widgets/kid_safe_banner.dart', 'lib/features/shell/main_shell.dart']);
   });
 
   testWidgets('shell shows no banner until an ad has loaded (no empty ad box)', (tester) async {
