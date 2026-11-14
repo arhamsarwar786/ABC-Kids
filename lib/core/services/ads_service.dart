@@ -7,13 +7,13 @@ import '../audio/audio_coordinator.dart';
 import '../constants/ad_constants.dart';
 
 /// Where ads may appear, following the Google Play Families ads policy for
-/// apps aimed at children: one clearly labelled banner on the browse tabs
-/// (never inside lessons, games or rewards), and no full-screen formats —
+/// apps aimed at children: one clearly labelled banner per screen, docked in
+/// its own strip below the content (see AdFrame; never drawn over lessons,
+/// games or rewards), and no full-screen formats —
 /// interstitial, rewarded and app-open ads “take up the entire screen”, which
 /// the policy prohibits for this audience. Those switches stay off; the code
 /// is kept so the decision is documented. See docs/redesign/MONETIZATION.md.
 class AdPlacementPolicy {
-  final bool parentAreaBanner;
   final bool childBanners;
   final bool childNative;
   final bool sessionEndInterstitial;
@@ -21,7 +21,6 @@ class AdPlacementPolicy {
   final bool rewardedPrompts;
 
   const AdPlacementPolicy({
-    this.parentAreaBanner = true,
     this.childBanners = false,
     this.childNative = false,
     this.sessionEndInterstitial = false,
@@ -36,8 +35,8 @@ class AdPlacementPolicy {
 
 /// Google Mobile Ads integration (child-directed, G-rated).
 ///
-/// The SDK is initialised lazily, only when a grown-up opens the parent area,
-/// so child play sessions make no ad requests.
+/// The SDK starts when the app's banner strip first builds (banner only, so
+/// nothing covers the screen at launch).
 class AdsService extends ChangeNotifier {
   static const Duration _fullscreenCooldown = Duration(seconds: 90);
   static const Duration _appOpenMaxAge = Duration(hours: 4);
